@@ -57,18 +57,19 @@ public class UpdatedBrandListener {
             partitionId, offset, groupId, receivedTimestamp, payload);
         try {
             List<BrandRequestDTO> brandDTOs = brandConverter.convertUpdatedBrands(payload);
-            if (CollectionUtils.isEmpty(brands)) {
+            if (CollectionUtils.isEmpty(brandDTOs)) {
                 return;
             }
             brandConverter.addMethodTypeAndBrands(brands, brandDTOs);
-            if(brands.get(MethodType.UPDATE).size() >= BATCH_SIZE) {
+            if(brands.containsKey(MethodType.UPDATE) && brands.get(MethodType.UPDATE).size() >= BATCH_SIZE) {
+
                 List<BrandRequestDTO> brandsToUpdate = brandConverter.getSortedBrands(brands, MethodType.UPDATE);
                 //TODO: redis에 넣기
             }
-            if(brands.get(MethodType.DELETE).size() >= BATCH_SIZE) {
+            if(brands.containsKey(MethodType.DELETE) && brands.get(MethodType.DELETE).size() >= BATCH_SIZE) {
                 List<BrandRequestDTO> brandsToDelete = brandConverter.getSortedBrands(brands, MethodType.DELETE);
             }
-            if(brands.get(MethodType.INSERT).size() >= BATCH_SIZE) {
+            if(brands.containsKey(MethodType.INSERT) && brands.get(MethodType.INSERT).size() >= BATCH_SIZE) {
                 List<BrandRequestDTO> brandsToInsert = brandConverter.getSortedBrands(brands, MethodType.INSERT);
             }
             ack.acknowledge();
