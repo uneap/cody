@@ -21,10 +21,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
-import org.springframework.kafka.retrytopic.RetryTopicConfiguration;
-import org.springframework.kafka.retrytopic.RetryTopicConfigurationBuilder;
-import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
-import org.springframework.kafka.support.EndpointHandlerMethod;
 
 @Slf4j
 @Configuration
@@ -35,10 +31,6 @@ public class KafkaConfig {
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${kafka.retry.topic}")
-    private String retryTopic;
-    private static final short REPLICATION_FACTOR = 3;
-    private static final int PARTITION = 3;
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
@@ -94,19 +86,6 @@ public class KafkaConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setAckMode(AckMode.MANUAL);
         return factory;
-    }
-
-    @Bean
-    public RetryTopicConfiguration retryableTopic(KafkaTemplate<String, String> template) {
-        return RetryTopicConfigurationBuilder
-            .newInstance()
-            .autoCreateTopicsWith(PARTITION, REPLICATION_FACTOR)
-            .maxAttempts(3)
-            .exponentialBackoff(10 * 1000L, 2, 5 * 60 * 1000L)
-            .listenerFactory(kafkaListenerContainerFactory())
-            .setTopicSuffixingStrategy(TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE)
-            .dltHandlerMethod(new EndpointHandlerMethod(ConsumerErrorsHandler.class, "postProcessDltMessage"))
-            .create(template);
     }
 }
 
