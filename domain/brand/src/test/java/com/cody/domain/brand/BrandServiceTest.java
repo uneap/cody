@@ -1,5 +1,7 @@
 package com.cody.domain.brand;
 
+import com.cody.domain.brand.db.BrandDAO;
+import com.cody.domain.brand.db.BrandService;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

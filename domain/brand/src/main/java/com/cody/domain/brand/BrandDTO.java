@@ -1,5 +1,6 @@
 package com.cody.domain.brand;
 
+import com.cody.domain.brand.db.BrandDAO;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
