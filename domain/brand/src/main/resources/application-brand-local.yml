@@ -11,3 +11,8 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         format_sql: true
         show_sql: true
+  kafka:
+    retry:
+      topic: brand-retry-stream
+    topic: brand-stream
+

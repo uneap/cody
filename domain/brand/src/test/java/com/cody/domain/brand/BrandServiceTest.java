@@ -1,5 +1,7 @@
 package com.cody.domain.brand;
 
+import com.cody.domain.brand.db.BrandDAO;
+import com.cody.domain.brand.dto.BrandDTO;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -49,13 +51,13 @@ public class BrandServiceTest {
 
     @Test
     void updateName_SUCCESS() {
-        BrandDAO brandDAO = brandService.updateName(BrandDTO.builder().name("HHHHHHH").id(12L).build());
+        BrandDAO brandDAO = brandService.updateBrand(BrandDTO.builder().name("HHHHHHH").id(12L).build());
         Assertions.assertEquals("HHHHHHH", brandDAO.getName());
     }
 
     @Test
     void updateName_FAIL() {
-        BrandDAO brandDAO = brandService.updateName(BrandDTO.builder().name("HHHHHHH").id(18L).build());
+        BrandDAO brandDAO = brandService.updateBrand(BrandDTO.builder().name("HHHHHHH").id(18L).build());
         Assertions.assertThrows(NullPointerException.class, () -> "HHHHHHH".equals(brandDAO.getName()));
     }
 

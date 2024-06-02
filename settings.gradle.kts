@@ -11,6 +11,9 @@ plugins {
 }
 module(name = ":frontend", "frontend")
 
+module(name = ":common", "common")
+module(name = ":common:core", "common/core")
+
 module(name = ":backend", "backend")
 module(name = ":backend:bff", "backend/bff")
 module(name = ":backend:cache-stream", "backend/cache-stream")

@@ -1,13 +1,14 @@
-package com.cody.domain.brand;
+package com.cody.domain.brand.dto;
 
+import com.cody.domain.brand.db.BrandDAO;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @ToString
-@Builder
+@SuperBuilder
 @Getter
 public class BrandDTO {
     private Long id;

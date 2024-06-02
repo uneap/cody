@@ -1,6 +1,7 @@
-package com.cody.domain.brand;
+package com.cody.domain.brand.db;
 
 
+import com.cody.domain.brand.dto.BrandDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,11 +58,12 @@ public class BrandDAO {
         this.lastModifiedDate = brand.getLastModifiedDate();
     }
 
-    public void changeName(String name) {
-        if(this.name.equals(name)){
+    public void changeData(BrandDTO brandDTO) {
+        // TODO: 만일 name 외에 변경될 수 있는 데이터 추가 될 경우, 조건 추가
+        if(this.name.equals(brandDTO.getName())){
            return;
         }
-        this.name = name;
+        this.name = brandDTO.getName();
         this.version = this.version + 1;
     }
 }
