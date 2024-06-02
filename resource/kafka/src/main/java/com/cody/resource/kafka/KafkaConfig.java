@@ -28,6 +28,7 @@ import org.springframework.kafka.listener.ContainerProperties.AckMode;
 public class KafkaConfig {
     @Value("${kafka.acks}")
     private String acks;
+    // min.insync.replicas=2
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
@@ -41,12 +42,13 @@ public class KafkaConfig {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ProducerConfig.RETRIES_CONFIG, 3);
+        props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 3);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
         props.put(ProducerConfig.ACKS_CONFIG, acks);
 
         return props;

@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +47,16 @@ public class BrandDAO {
         String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.createdDate = parsedCreateDate;
+        if(version == null) {
+            this.version = 0L;
+        }
         this.lastModifiedDate = parsedCreateDate;
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public BrandDAO(BrandDTO brand) {
@@ -54,8 +64,6 @@ public class BrandDAO {
             this.id = brand.getId();
         }
         this.name = brand.getName();
-        this.createdDate = brand.getCreatedDate();
-        this.lastModifiedDate = brand.getLastModifiedDate();
     }
 
     public void changeData(BrandDTO brandDTO) {

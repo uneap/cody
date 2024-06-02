@@ -1,8 +1,7 @@
 package com.cody.domain.brand;
 
 import com.cody.common.core.MethodType;
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.KafkaBrandDTO;
+import com.cody.domain.brand.dto.BrandRequestDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,25 +16,25 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BrandConverter {
-    private final ObjectMapper mapper;
-    public List<KafkaBrandDTO> convertUpdatedBrands(String payload) {
+    private final ObjectMapper objectMapper;
+    public List<BrandRequestDTO> convertUpdatedBrands(String payload) {
         try {
-            return mapper.readValue(payload, new TypeReference<>() {});
+            return objectMapper.readValue(payload, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
-            log.error("[FAIL] Convert UpdatedTarget! message = {}", e.getMessage());
+            log.error("[FAIL] Convert UpdatedBrands! message = {}", e.getMessage());
         }
         return null;
     }
-    public void addMethodTypeAndBrands(Map<MethodType, List<KafkaBrandDTO>> methodTypeAndBrands, List<KafkaBrandDTO> kafkaBrands) {
-        for (KafkaBrandDTO kafkaBrand : kafkaBrands) {
+    public void addMethodTypeAndBrands(Map<MethodType, List<BrandRequestDTO>> methodTypeAndBrands, List<BrandRequestDTO> kafkaBrands) {
+        for (BrandRequestDTO kafkaBrand : kafkaBrands) {
             MethodType methodType = kafkaBrand.getMethodType();
-            List<KafkaBrandDTO> brands = methodTypeAndBrands.getOrDefault(methodType, new ArrayList<>());
+            List<BrandRequestDTO> brands = methodTypeAndBrands.getOrDefault(methodType, new ArrayList<>());
             brands.add(kafkaBrand);
             methodTypeAndBrands.put(kafkaBrand.getMethodType(), brands);
         }
     }
 
-    public List<BrandDTO> getSortedBrands(Map<MethodType, List<KafkaBrandDTO>> methodTypeAndBrands, MethodType type) {
+    public List<BrandRequestDTO> getSortedBrands(Map<MethodType, List<BrandRequestDTO>> methodTypeAndBrands, MethodType type) {
         return methodTypeAndBrands.get(type).stream().sorted().collect(Collectors.toList());
     }
 }
