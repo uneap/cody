@@ -1,6 +1,7 @@
 [versions]
 spring-boot = "3.2.3"
 spring = "6.1.5"
+jackson = "2.16.2"
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
@@ -17,6 +18,8 @@ slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.12" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.30" }
 h2 = { module = "com.h2database:h2", version = "2.2.224" }
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
+jackson = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+
 
 spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
 spring-kafka = { module = "org.springframework.kafka:spring-kafka", version = "3.1.4" }
