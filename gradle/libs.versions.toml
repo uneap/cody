@@ -1,0 +1,23 @@
+[versions]
+spring-boot = "3.2.3"
+spring = "6.1.5"
+
+[libraries]
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+spring-boot-starter-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "spring-boot" }
+spring-boot-starter-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.9.3" }
+junit = { module = "junit:junit", version = "4.13.2" }
+
+lombok = { module = "org.projectlombok:lombok", version = "1.18.30" }
+h2 = { module = "com.h2database:h2", version = "2.2.224" }
+gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
+
+spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
