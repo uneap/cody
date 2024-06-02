@@ -4,6 +4,7 @@ import static org.springframework.kafka.support.KafkaHeaders.GROUP_ID;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,7 +21,12 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
+import org.springframework.kafka.retrytopic.RetryTopicConfiguration;
+import org.springframework.kafka.retrytopic.RetryTopicConfigurationBuilder;
+import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
+import org.springframework.kafka.support.EndpointHandlerMethod;
 
+@Slf4j
 @Configuration
 @EnableKafka
 public class KafkaConfig {
@@ -29,6 +35,10 @@ public class KafkaConfig {
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${kafka.retry.topic}")
+    private String retryTopic;
+    private static final short REPLICATION_FACTOR = 3;
+    private static final int PARTITION = 3;
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
@@ -55,6 +65,7 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
+    @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
 
@@ -71,6 +82,7 @@ public class KafkaConfig {
         return props;
     }
 
+    @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
@@ -82,6 +94,19 @@ public class KafkaConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setAckMode(AckMode.MANUAL);
         return factory;
+    }
+
+    @Bean
+    public RetryTopicConfiguration retryableTopic(KafkaTemplate<String, String> template) {
+        return RetryTopicConfigurationBuilder
+            .newInstance()
+            .autoCreateTopicsWith(PARTITION, REPLICATION_FACTOR)
+            .maxAttempts(3)
+            .exponentialBackoff(10 * 1000L, 2, 5 * 60 * 1000L)
+            .listenerFactory(kafkaListenerContainerFactory())
+            .setTopicSuffixingStrategy(TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE)
+            .dltHandlerMethod(new EndpointHandlerMethod(ConsumerErrorsHandler.class, "postProcessDltMessage"))
+            .create(template);
     }
 }
 
