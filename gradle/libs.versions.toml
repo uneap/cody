@@ -18,6 +18,7 @@ h2 = { module = "com.h2database:h2", version = "2.2.224" }
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
 
 spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
+spring-kafka = { module = "org.springframework.kafka:spring-kafka", version = "3.1.4" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: kafka-local
+kafka:
+  bootstrap-servers: localhost:10000,localhost:10001,localhost:10002
+  acks: 1
+
