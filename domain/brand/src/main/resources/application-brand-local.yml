@@ -12,7 +12,8 @@ spring:
         format_sql: true
         show_sql: true
   kafka:
-    retry:
-      topic: brand-retry-stream
-    topic: brand-stream
+    brand:
+      retry:
+        topic: brand-retry-stream
+      topic: brand-stream
 
