@@ -22,11 +22,8 @@ module(name = ":backend:storage", "backend/storage")
 module(name = ":backend:full-cache-batch", "backend/full-cache-batch")
 
 module(name = ":domain", "domain")
-module(name = ":domain:brand", "domain/brand")
-module(name = ":domain:category", "domain/category")
-module(name = ":domain:product", "domain/product")
-module(name = ":domain:seller", "domain/seller")
-module(name = ":domain:user", "domain/user")
+module(name = ":domain:store", "domain/store")
+module(name = ":domain:users", "domain/users")
 
 module(name = ":resource", "resource")
 module(name = ":resource:kafka", "resource/kafka")
