@@ -49,6 +49,8 @@ public class BrandDAO {
         this.createdDate = parsedCreateDate;
         if(version == null) {
             this.version = 0L;
+        } else {
+            this.version = this.version + 1;
         }
         this.lastModifiedDate = parsedCreateDate;
     }

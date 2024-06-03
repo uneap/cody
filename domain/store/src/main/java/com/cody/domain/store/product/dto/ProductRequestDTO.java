@@ -25,8 +25,9 @@ public class ProductRequestDTO extends ProductDTO implements Comparable<ProductR
             .createdDate(productDTO.getCreatedDate())
             .lastModifiedDate(productDTO.getLastModifiedDate())
             .methodType(type)
-            .brandDTO(productDTO.getBrandDTO())
-            .categoryDTO(productDTO.getCategoryDTO())
+            .price(productDTO.getPrice())
+            .brandId(productDTO.getBrandId())
+            .categoryId(productDTO.getCategoryId())
             .version(productDTO.getVersion()).build();
     }
 }

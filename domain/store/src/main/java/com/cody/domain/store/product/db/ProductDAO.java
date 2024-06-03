@@ -5,8 +5,10 @@ import com.cody.domain.store.brand.db.BrandDAO;
 import com.cody.domain.store.category.db.CategoryDAO;
 import com.cody.domain.store.product.dto.ProductDTO;
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,11 +40,11 @@ public class ProductDAO {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID", updatable = false, insertable = true)
+    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID", updatable = false, foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private CategoryDAO category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BRAND_ID", referencedColumnName = "ID", updatable = false, insertable = true)
+    @JoinColumn(name = "BRAND_ID", referencedColumnName = "ID", updatable = false, foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private BrandDAO brand;
 
     @Column
@@ -76,20 +78,22 @@ public class ProductDAO {
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public ProductDAO(ProductDTO product) {
+    public ProductDAO(ProductDTO product, CategoryDAO category, BrandDAO brand) {
         if(product.getId() != null) {
             this.id = product.getId();
         }
-        category = new CategoryDAO(product.getCategoryDTO());
-        brand = new BrandDAO(product.getBrandDTO());
+        this.category = category;
+        this.brand = brand;
         this.name = product.getName();
+        this.price = product.getPrice();
     }
 
     public void changeData(ProductDTO product) {
-        // TODO: 만일 name 외에 변경될 수 있는 데이터 추가 될 경우, 조건 추가
-        if(this.name.equals(product.getName())){
+        // TODO: 만일 name, price 외에 변경될 수 있는 데이터 추가 될 경우, 조건 추가
+        if(this.name.equals(product.getName()) && this.price == product.getPrice()){
             return;
         }
+        this.price = product.getPrice();
         this.name = product.getName();
         this.version = this.version + 1;
     }

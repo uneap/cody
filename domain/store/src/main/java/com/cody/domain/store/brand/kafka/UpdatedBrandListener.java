@@ -62,15 +62,17 @@ public class UpdatedBrandListener {
             }
             brandConverter.addMethodTypeAndBrands(brands, brandDTOs);
             if(brands.containsKey(MethodType.UPDATE) && brands.get(MethodType.UPDATE).size() >= BATCH_SIZE) {
-
                 List<BrandRequestDTO> brandsToUpdate = brandConverter.getSortedBrands(brands, MethodType.UPDATE);
                 //TODO: redis에 넣기
+                brands.get(MethodType.UPDATE).clear();
             }
             if(brands.containsKey(MethodType.DELETE) && brands.get(MethodType.DELETE).size() >= BATCH_SIZE) {
                 List<BrandRequestDTO> brandsToDelete = brandConverter.getSortedBrands(brands, MethodType.DELETE);
+                brands.get(MethodType.DELETE).clear();
             }
             if(brands.containsKey(MethodType.INSERT) && brands.get(MethodType.INSERT).size() >= BATCH_SIZE) {
                 List<BrandRequestDTO> brandsToInsert = brandConverter.getSortedBrands(brands, MethodType.INSERT);
+                brands.get(MethodType.INSERT).clear();
             }
             ack.acknowledge();
         } catch (Exception e) {

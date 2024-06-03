@@ -1,7 +1,5 @@
 package com.cody.domain.store.product.dto;
 
-import com.cody.domain.store.brand.dto.BrandDTO;
-import com.cody.domain.store.category.dto.CategoryDTO;
 import com.cody.domain.store.product.db.ProductDAO;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -19,19 +17,21 @@ public class ProductDTO {
     private Long id;
     private String name;
     private Long version;
-    private CategoryDTO categoryDTO;
-    private BrandDTO brandDTO;
+    private Long categoryId;
+    private Long brandId;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
+    private Long price;
 
     public static ProductDTO daoBuilder(ProductDAO productDAO) {
         return builder()
             .id(productDAO.getId())
             .name(productDAO.getName())
-            .categoryDTO(CategoryDTO.daoBuilder(productDAO.getCategory()))
-            .brandDTO(BrandDTO.daoBuilder(productDAO.getBrand()))
+            .categoryId(productDAO.getCategory().getId())
+            .brandId(productDAO.getBrand().getId())
             .createdDate(productDAO.getCreatedDate())
             .lastModifiedDate(productDAO.getLastModifiedDate())
+            .price(productDAO.getPrice())
             .version(productDAO.getVersion()).build();
     }
 }

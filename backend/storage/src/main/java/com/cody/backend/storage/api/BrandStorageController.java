@@ -4,7 +4,7 @@ import com.cody.backend.storage.request.BrandRequest;
 import com.cody.backend.storage.response.BrandResponse;
 import com.cody.backend.storage.service.BrandStorageService;
 import com.cody.common.core.MethodType;
-import com.cody.domain.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.dto.BrandRequestDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
