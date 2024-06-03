@@ -1,7 +1,6 @@
-package com.cody.domain.brand.db;
+package com.cody.domain.category.db;
 
 
-import com.cody.domain.brand.dto.BrandDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,10 +19,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
-@Entity(name = "BRAND")
+@Entity(name = "CATEGORY")
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BrandDAO {
+public class CategoryDAO {
     @Version
     @Column(name = "VER_NO", nullable = false)
     private Long version;
@@ -57,21 +56,5 @@ public class BrandDAO {
     public void onPreUpdate() {
         String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
-    public BrandDAO(BrandDTO brand) {
-        if(brand.getId() != null) {
-            this.id = brand.getId();
-        }
-        this.name = brand.getName();
-    }
-
-    public void changeData(BrandDTO brandDTO) {
-        // TODO: 만일 name 외에 변경될 수 있는 데이터 추가 될 경우, 조건 추가
-        if(this.name.equals(brandDTO.getName())){
-           return;
-        }
-        this.name = brandDTO.getName();
-        this.version = this.version + 1;
     }
 }

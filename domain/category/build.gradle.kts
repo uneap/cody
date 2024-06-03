@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     implementation(projects.resource.db)
+    implementation(projects.common.core)
+    implementation(libs.jackson)
     compileOnly(libs.lombok)
     implementation(libs.lombok)
     annotationProcessor(libs.lombok)

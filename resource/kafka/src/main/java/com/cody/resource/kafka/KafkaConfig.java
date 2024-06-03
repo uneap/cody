@@ -21,10 +21,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
-import org.springframework.kafka.retrytopic.RetryTopicConfiguration;
-import org.springframework.kafka.retrytopic.RetryTopicConfigurationBuilder;
-import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
-import org.springframework.kafka.support.EndpointHandlerMethod;
 
 @Slf4j
 @Configuration
@@ -32,13 +28,10 @@ import org.springframework.kafka.support.EndpointHandlerMethod;
 public class KafkaConfig {
     @Value("${kafka.acks}")
     private String acks;
+    // min.insync.replicas=2
     @Value("${kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${kafka.retry.topic}")
-    private String retryTopic;
-    private static final short REPLICATION_FACTOR = 3;
-    private static final int PARTITION = 3;
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
@@ -49,12 +42,13 @@ public class KafkaConfig {
         Map<String, Object> props = new HashMap<>();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ProducerConfig.RETRIES_CONFIG, 3);
+        props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-        props.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 3);
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
         props.put(ProducerConfig.ACKS_CONFIG, acks);
 
         return props;
@@ -94,19 +88,6 @@ public class KafkaConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setAckMode(AckMode.MANUAL);
         return factory;
-    }
-
-    @Bean
-    public RetryTopicConfiguration retryableTopic(KafkaTemplate<String, String> template) {
-        return RetryTopicConfigurationBuilder
-            .newInstance()
-            .autoCreateTopicsWith(PARTITION, REPLICATION_FACTOR)
-            .maxAttempts(3)
-            .exponentialBackoff(10 * 1000L, 2, 5 * 60 * 1000L)
-            .listenerFactory(kafkaListenerContainerFactory())
-            .setTopicSuffixingStrategy(TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE)
-            .dltHandlerMethod(new EndpointHandlerMethod(ConsumerErrorsHandler.class, "postProcessDltMessage"))
-            .create(template);
     }
 }
 
