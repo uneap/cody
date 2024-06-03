@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation(libs.spring.context)
-    implementation(libs.spring.boot.redission)
     implementation(libs.spring.boot.starter.redis)
 
     implementation(libs.slf4j)
