@@ -2,7 +2,7 @@ package com.cody.domain.store.seller.db;
 
 
 import com.cody.domain.store.brand.db.BrandDAO;
-import com.cody.domain.store.seller.dto.SellerDTO;
+import com.cody.domain.store.seller.dto.UserDTO;
 import com.cody.domain.store.user.db.UserDAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -69,7 +69,7 @@ public class SellerDAO {
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public SellerDAO(SellerDTO sellerDTO, UserDAO user, BrandDAO brand) {
+    public SellerDAO(UserDTO sellerDTO, UserDAO user, BrandDAO brand) {
         if(sellerDTO.getId() != null) {
             this.id = sellerDTO.getId();
         }

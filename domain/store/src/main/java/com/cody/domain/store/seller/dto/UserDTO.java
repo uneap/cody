@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SellerDTO {
+public class UserDTO {
     private Long id;
     private Long brandId;
     private Long userId;
@@ -21,7 +21,7 @@ public class SellerDTO {
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
-    public static SellerDTO daoBuilder(SellerDAO sellerDAO) {
+    public static UserDTO daoBuilder(SellerDAO sellerDAO) {
         return builder()
             .id(sellerDAO.getId())
             .createdDate(sellerDAO.getCreatedDate())

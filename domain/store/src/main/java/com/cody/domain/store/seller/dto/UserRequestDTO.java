@@ -10,15 +10,15 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SellerRequestDTO extends SellerDTO implements Comparable<SellerRequestDTO> {
+public class UserRequestDTO extends UserDTO implements Comparable<UserRequestDTO> {
     private MethodType methodType;
 
     @Override
-    public int compareTo(SellerRequestDTO o) {
+    public int compareTo(UserRequestDTO o) {
         return this.getLastModifiedDate().compareTo(o.getLastModifiedDate());
     }
 
-    public static SellerRequestDTO dtoBuilder(SellerDTO sellerDTO, MethodType type) {
+    public static UserRequestDTO dtoBuilder(UserDTO sellerDTO, MethodType type) {
         return builder()
             .brandId(sellerDTO.getBrandId())
             .userId(sellerDTO.getUserId())

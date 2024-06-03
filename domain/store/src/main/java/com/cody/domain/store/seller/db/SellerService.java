@@ -1,6 +1,6 @@
 package com.cody.domain.store.seller.db;
 
-import com.cody.domain.store.seller.dto.SellerDTO;
+import com.cody.domain.store.seller.dto.UserDTO;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 public class SellerService {
     private final SellerRepository sellerRepository;
 
-    public List<SellerDTO> findAllById(List<Long> ids) throws NoSuchElementException {
+    public List<UserDTO> findAllById(List<Long> ids) throws NoSuchElementException {
         List<SellerDAO> brands = sellerRepository.findAllById(ids);
-        return brands.stream().map(SellerDTO::daoBuilder).collect(Collectors.toList());
+        return brands.stream().map(UserDTO::daoBuilder).collect(Collectors.toList());
     }
 
-    public List<SellerDTO> findAll() throws NoSuchElementException {
+    public List<UserDTO> findAll() throws NoSuchElementException {
         List<SellerDAO> brands = sellerRepository.findAll();
-        return brands.stream().map(SellerDTO::daoBuilder).collect(Collectors.toList());
+        return brands.stream().map(UserDTO::daoBuilder).collect(Collectors.toList());
     }
 
-    public SellerDTO findById(long id) throws NoSuchElementException {
+    public UserDTO findById(long id) throws NoSuchElementException {
         Optional<SellerDAO> brandDAO = sellerRepository.findById(id);
-        return brandDAO.map(SellerDTO::daoBuilder).orElseThrow(NoSuchElementException::new);
+        return brandDAO.map(UserDTO::daoBuilder).orElseThrow(NoSuchElementException::new);
     }
 }
