@@ -16,5 +16,4 @@ dependencies {
     implementation(projects.common.core)
     implementation(projects.resource.db)
     implementation(projects.domain.store)
-    implementation(projects.domain.users)
 }
