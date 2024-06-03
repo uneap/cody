@@ -1,6 +1,6 @@
-package com.cody.domain.brand.dto;
+package com.cody.domain.store.brand.dto;
 
-import com.cody.domain.brand.db.BrandDAO;
+import com.cody.domain.store.brand.db.BrandDAO;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,13 +1,13 @@
-package com.cody.domain.brand.kafka;
+package com.cody.domain.store.brand.kafka;
 
 import static com.cody.common.core.Constants.BATCH_SIZE;
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
 import com.cody.common.core.MethodType;
-import com.cody.domain.brand.BrandConverter;
-import com.cody.domain.brand.BrandService;
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.KafkaBrandDTO;
+import com.cody.domain.store.brand.BrandConverter;
+import com.cody.domain.store.brand.BrandService;
+import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.KafkaBrandDTO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

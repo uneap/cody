@@ -1,8 +1,8 @@
-package com.cody.domain.brand;
+package com.cody.domain.store.brand;
 
 import com.cody.common.core.MethodType;
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.KafkaBrandDTO;
+import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.KafkaBrandDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,7 +1,7 @@
-package com.cody.domain.brand.db;
+package com.cody.domain.store.brand.db;
 
 
-import com.cody.domain.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.BrandDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

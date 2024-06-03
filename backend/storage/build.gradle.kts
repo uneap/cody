@@ -12,8 +12,6 @@ dependencies {
     runtimeOnly(libs.h2)
 
     implementation(projects.resource.db)
-    implementation(projects.domain.brand)
-    implementation(projects.domain.product)
-    implementation(projects.domain.user)
-    implementation(projects.domain.seller)
+    implementation(projects.domain.store)
+    implementation(projects.domain.users)
 }

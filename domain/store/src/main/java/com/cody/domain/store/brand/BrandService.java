@@ -1,8 +1,8 @@
-package com.cody.domain.brand;
+package com.cody.domain.store.brand;
 
-import com.cody.domain.brand.db.BrandDAO;
-import com.cody.domain.brand.db.BrandRepository;
-import com.cody.domain.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.db.BrandDAO;
+import com.cody.domain.store.brand.db.BrandRepository;
+import com.cody.domain.store.brand.dto.BrandDTO;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
