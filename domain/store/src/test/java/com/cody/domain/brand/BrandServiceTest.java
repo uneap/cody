@@ -1,19 +1,19 @@
 package com.cody.domain.brand;
 
-import com.cody.domain.store.brand.BrandService;
-import com.cody.domain.store.brand.db.BrandDAO;
-import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.brand.dto.BrandDTO;
+import com.cody.domain.brand.dto.BrandRequestDTO;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.junit.jupiter.api.Test;
 
 @Slf4j
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -28,16 +28,16 @@ public class BrandServiceTest {
     @Test
     void insertAll_FAIL() {
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> brandService.insertAll(Arrays.asList(
-            BrandDTO.builder()
+            BrandRequestDTO.builder()
                     .id(11L)
                     .name("A").build(),
-            BrandDTO.builder().id(11L).name("B").build())));
+            BrandRequestDTO.builder().id(11L).name("B").build())));
     }
 
     @Test
     void insertAll_SUCCESS() {
-        List<BrandDAO> brands = brandService.insertAll(Arrays.asList(BrandDTO.builder()
-                                                                             .name("A").build(), BrandDTO.builder()
+        List<BrandDTO> brands = brandService.insertAll(Arrays.asList(BrandRequestDTO.builder()
+                                                                             .name("A").build(), BrandRequestDTO.builder()
                                                                                  .name("B")
                                                                                  .build()));
         Assertions.assertEquals(1, brands.stream().filter(brand -> brand.getName().equals("A")).count());
@@ -46,20 +46,19 @@ public class BrandServiceTest {
 
     @Test
     void insert_SUCCESS() {
-        BrandDAO brand = brandService.insert(BrandDTO.builder().name("D").build());
+        BrandDTO brand = brandService.insert(BrandRequestDTO.builder().name("D").build());
         Assertions.assertEquals("D", brand.getName());
     }
 
     @Test
     void updateName_SUCCESS() {
-        BrandDAO brandDAO = brandService.updateBrand(BrandDTO.builder().name("HHHHHHH").id(12L).build());
+        BrandDTO brandDAO = brandService.updateBrand(BrandRequestDTO.builder().name("HHHHHHH").id(12L).build());
         Assertions.assertEquals("HHHHHHH", brandDAO.getName());
     }
 
     @Test
     void updateName_FAIL() {
-        BrandDAO brandDAO = brandService.updateBrand(BrandDTO.builder().name("HHHHHHH").id(18L).build());
-        Assertions.assertThrows(NullPointerException.class, () -> "HHHHHHH".equals(brandDAO.getName()));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> brandService.updateBrand(BrandRequestDTO.builder().name("HHHHHHH").id(-1L).build()));
     }
 
     @Test

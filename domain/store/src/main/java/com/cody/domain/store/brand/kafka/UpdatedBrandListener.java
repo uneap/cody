@@ -1,13 +1,12 @@
-package com.cody.domain.store.brand.kafka;
+package com.cody.domain.brand.kafka;
 
 import static com.cody.common.core.Constants.BATCH_SIZE;
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
 import com.cody.common.core.MethodType;
-import com.cody.domain.store.brand.BrandConverter;
-import com.cody.domain.store.brand.BrandService;
-import com.cody.domain.store.brand.dto.BrandDTO;
-import com.cody.domain.store.brand.dto.KafkaBrandDTO;
+import com.cody.domain.brand.BrandConverter;
+import com.cody.domain.brand.BrandService;
+import com.cody.domain.brand.dto.BrandRequestDTO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,20 +32,21 @@ import org.springframework.util.CollectionUtils;
 @Component
 @RequiredArgsConstructor
 public class UpdatedBrandListener {
-    @Value("${kafka.retry.topic}")
+    @Value("${kafka.brand.retry.topic}")
     private String retryTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final BrandService brandService;
     private final BrandConverter brandConverter;
-    private final Map<MethodType, List<KafkaBrandDTO>> brands = new HashMap<>();
+    private final Map<MethodType, List<BrandRequestDTO>> brands = new HashMap<>();
 
     @RetryableTopic(
         backoff = @Backoff(delay = 10 * 1000, multiplier = 3, maxDelay = 10 * 60 * 1000),
+        autoCreateTopics = "false",
         topicSuffixingStrategy = SUFFIX_WITH_INDEX_VALUE,
         dltStrategy = DltStrategy.ALWAYS_RETRY_ON_ERROR,
         listenerContainerFactory = "kafkaListenerContainerFactory"
     )
-    @KafkaListener(id = "updated-brand-stream", topics = {"${kafka.topic}", "{kafka.retry.topic}"})
+    @KafkaListener(id = "updated-brand-stream", topics = {"${kafka.brand.topic}", "${kafka.brand.retry.topic}"})
     public void consume(@Payload String payload,
         @Header(KafkaHeaders.OFFSET) Long offset,
         @Header(KafkaHeaders.RECEIVED_PARTITION) int partitionId,
@@ -56,22 +56,20 @@ public class UpdatedBrandListener {
         log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}",
             partitionId, offset, groupId, receivedTimestamp, payload);
         try {
-            List<KafkaBrandDTO> brandDTOs = brandConverter.convertUpdatedBrands(payload);
+            List<BrandRequestDTO> brandDTOs = brandConverter.convertUpdatedBrands(payload);
             if (CollectionUtils.isEmpty(brands)) {
                 return;
             }
             brandConverter.addMethodTypeAndBrands(brands, brandDTOs);
             if(brands.get(MethodType.UPDATE).size() >= BATCH_SIZE) {
-                List<BrandDTO> brandsToUpdate = brandConverter.getSortedBrands(brands, MethodType.UPDATE);
-                brandService.updateBrands(brandsToUpdate);
+                List<BrandRequestDTO> brandsToUpdate = brandConverter.getSortedBrands(brands, MethodType.UPDATE);
+                //TODO: redis에 넣기
             }
             if(brands.get(MethodType.DELETE).size() >= BATCH_SIZE) {
-                List<BrandDTO> brandsToDelete = brandConverter.getSortedBrands(brands, MethodType.DELETE);
-                brandService.deleteBrands(brandsToDelete);
+                List<BrandRequestDTO> brandsToDelete = brandConverter.getSortedBrands(brands, MethodType.DELETE);
             }
             if(brands.get(MethodType.INSERT).size() >= BATCH_SIZE) {
-                List<BrandDTO> brandsToInsert = brandConverter.getSortedBrands(brands, MethodType.INSERT);
-                brandService.deleteBrands(brandsToInsert);
+                List<BrandRequestDTO> brandsToInsert = brandConverter.getSortedBrands(brands, MethodType.INSERT);
             }
             ack.acknowledge();
         } catch (Exception e) {

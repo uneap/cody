@@ -3,6 +3,7 @@ package com.cody.domain.store.brand.dto;
 import com.cody.domain.store.brand.db.BrandDAO;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -10,11 +11,11 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 @Getter
+@Setter
+@NoArgsConstructor
 public class BrandDTO {
     private Long id;
-    @Setter
     private String name;
-    @Setter
     private Long version;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
