@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.spring.boot.starter.jpa)
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.kafka)
+    implementation(libs.spring.context)
     runtimeOnly(libs.h2)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.junit.jupiter)

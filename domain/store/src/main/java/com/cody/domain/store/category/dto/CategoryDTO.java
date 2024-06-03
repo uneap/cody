@@ -1,6 +1,6 @@
-package com.cody.domain.category.dto;
+package com.cody.domain.store.category.dto;
 
-import com.cody.domain.category.db.CategoryDAO;
+import com.cody.domain.store.category.db.CategoryDAO;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

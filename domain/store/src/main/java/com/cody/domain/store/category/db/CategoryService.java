@@ -1,6 +1,6 @@
-package com.cody.domain.category.db;
+package com.cody.domain.store.category.db;
 
-import com.cody.domain.category.dto.CategoryDTO;
+import com.cody.domain.store.category.dto.CategoryDTO;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;

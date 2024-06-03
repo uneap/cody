@@ -1,9 +1,7 @@
-package com.cody.domain.brand;
+package com.cody.domain.store.brand.db;
 
-import com.cody.domain.brand.db.BrandDAO;
-import com.cody.domain.brand.db.BrandRepository;
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.BrandRequestDTO;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;

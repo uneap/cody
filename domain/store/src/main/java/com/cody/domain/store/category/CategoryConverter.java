@@ -1,7 +1,7 @@
-package com.cody.domain.category;
+package com.cody.domain.store.category;
 
 import com.cody.common.core.MethodType;
-import com.cody.domain.category.dto.CategoryRequestDTO;
+import com.cody.domain.store.category.dto.CategoryRequestDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

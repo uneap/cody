@@ -2,9 +2,9 @@ package com.cody.backend.storage.service;
 
 import com.cody.backend.storage.sender.BrandKafkaSender;
 import com.cody.common.core.MethodType;
-import com.cody.domain.brand.BrandService;
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.db.BrandService;
+import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.BrandRequestDTO;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;

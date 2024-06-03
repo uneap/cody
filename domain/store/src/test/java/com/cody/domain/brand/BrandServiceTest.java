@@ -1,7 +1,8 @@
 package com.cody.domain.brand;
 
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.db.BrandService;
+import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.BrandRequestDTO;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @SpringBootTest
 @ContextConfiguration(classes = {TestConfiguration.class})
-@ActiveProfiles({"brand-local", "db-local"})
+@ActiveProfiles({"store-local", "db-local"})
 public class BrandServiceTest {
 
     @Autowired
@@ -29,15 +30,15 @@ public class BrandServiceTest {
     void insertAll_FAIL() {
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> brandService.insertAll(Arrays.asList(
             BrandRequestDTO.builder()
-                    .id(11L)
-                    .name("A").build(),
+                           .id(11L)
+                           .name("A").build(),
             BrandRequestDTO.builder().id(11L).name("B").build())));
     }
 
     @Test
     void insertAll_SUCCESS() {
         List<BrandDTO> brands = brandService.insertAll(Arrays.asList(BrandRequestDTO.builder()
-                                                                             .name("A").build(), BrandRequestDTO.builder()
+                                                                                    .name("A").build(), BrandRequestDTO.builder()
                                                                                  .name("B")
                                                                                  .build()));
         Assertions.assertEquals(1, brands.stream().filter(brand -> brand.getName().equals("A")).count());

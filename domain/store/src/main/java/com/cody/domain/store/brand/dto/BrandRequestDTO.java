@@ -1,4 +1,4 @@
-package com.cody.domain.brand.dto;
+package com.cody.domain.store.brand.dto;
 
 import com.cody.common.core.MethodType;
 import lombok.Getter;

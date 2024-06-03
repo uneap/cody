@@ -1,4 +1,4 @@
-package com.cody.domain.category.dto;
+package com.cody.domain.store.category.dto;
 
 import com.cody.common.core.MethodType;
 import lombok.Getter;
