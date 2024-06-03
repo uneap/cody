@@ -13,13 +13,16 @@ public class ProductStorageService {
 
     public void addProductInCache(DisplayProduct displayProduct) {
         lowestPriceBrandService.refreshLowestPriceBrandToAdd(displayProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToAdd(displayProduct);
     }
 
     public void deleteProductInCache(DisplayProduct displayProduct) {
         lowestPriceBrandService.refreshLowestPriceBrandToDelete(displayProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToDelete(displayProduct);
     }
 
     public void updateProductInCache(DisplayProduct displayProduct) {
         lowestPriceBrandService.refreshLowestPriceBrandToUpdate(displayProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToUpdate(displayProduct);
     }
 }
