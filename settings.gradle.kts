@@ -23,7 +23,7 @@ module(name = ":backend:full-cache-batch", "backend/full-cache-batch")
 
 module(name = ":domain", "domain")
 module(name = ":domain:store", "domain/store")
-
+module(name = ":domain:store-cache", "domain/store-cache")
 module(name = ":resource", "resource")
 module(name = ":resource:kafka", "resource/kafka")
 module(name = ":resource:redis", "resource/redis")
