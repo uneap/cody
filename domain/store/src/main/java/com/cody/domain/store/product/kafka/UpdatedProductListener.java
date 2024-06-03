@@ -62,12 +62,17 @@ public class UpdatedProductListener {
             if(products.get(MethodType.UPDATE).size() >= BATCH_SIZE) {
                 List<ProductRequestDTO> productsToUpdate = productConverter.getSortedProducts(products, MethodType.UPDATE);
                 //TODO: redis에 넣기
+                products.get(MethodType.UPDATE).clear();
             }
             if(products.get(MethodType.DELETE).size() >= BATCH_SIZE) {
                 List<ProductRequestDTO> productsToDelete = productConverter.getSortedProducts(products, MethodType.DELETE);
+                products.get(MethodType.DELETE).clear();
+
             }
             if(products.get(MethodType.INSERT).size() >= BATCH_SIZE) {
                 List<ProductRequestDTO> productsToInsert = productConverter.getSortedProducts(products, MethodType.INSERT);
+                products.get(MethodType.INSERT).clear();
+
             }
             ack.acknowledge();
         } catch (Exception e) {

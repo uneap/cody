@@ -1,4 +1,4 @@
-package com.cody.domain.brand;
+package com.cody.domain.store;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

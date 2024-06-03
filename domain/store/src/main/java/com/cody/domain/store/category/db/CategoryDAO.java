@@ -1,7 +1,6 @@
 package com.cody.domain.store.category.db;
 
 
-import com.cody.domain.store.category.dto.CategoryDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,12 +56,5 @@ public class CategoryDAO {
     public void onPreUpdate() {
         String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
-    public CategoryDAO(CategoryDTO categoryDTO) {
-        if(categoryDTO.getId() != null) {
-            this.id = categoryDTO.getId();
-        }
-        this.name = categoryDTO.getName();
     }
 }

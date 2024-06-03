@@ -1,8 +1,8 @@
 package com.cody.backend.storage.request;
 
 import com.cody.common.core.MethodType;
-import com.cody.domain.brand.dto.BrandDTO;
-import com.cody.domain.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.brand.dto.BrandRequestDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;

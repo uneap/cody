@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -39,7 +40,7 @@ public class BrandService {
         return BrandDTO.daoBuilder(brandDAO);
     }
     @Transactional
-    public List<BrandDTO> updateBrands(List<BrandRequestDTO> brandDTOs) throws OptimisticLockingFailureException, EntityNotFoundException {
+    public List<BrandDTO> updateBrands(List<BrandRequestDTO> brandDTOs) throws OptimisticLockingFailureException, EntityNotFoundException, DataIntegrityViolationException {
         List<BrandDAO> brandDAOs = brandDTOs.stream()
                                             .map(this::convertUpdatedBrandData)
                                             .collect(Collectors.toList());
@@ -73,7 +74,7 @@ public class BrandService {
     }
 
     @Transactional
-    public void deleteBrand(BrandRequestDTO brandDTO) throws EmptyResultDataAccessException {
+    public void deleteBrand(BrandRequestDTO brandDTO) throws EmptyResultDataAccessException, InvalidDataAccessApiUsageException {
         brandRepository.deleteById(brandDTO.getId());
     }
 
