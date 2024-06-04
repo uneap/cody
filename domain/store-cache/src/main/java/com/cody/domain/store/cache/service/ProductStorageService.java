@@ -13,13 +13,21 @@ public class ProductStorageService {
 
     public void addProductInCache(DisplayProduct displayProduct) {
         lowestPriceBrandService.refreshLowestPriceBrandToAdd(displayProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToAdd(displayProduct);
+        lowHighPriceCategoryService.refreshLowHighCategoryToAdd(displayProduct);
     }
 
     public void deleteProductInCache(DisplayProduct displayProduct) {
         lowestPriceBrandService.refreshLowestPriceBrandToDelete(displayProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToDelete(displayProduct);
+        lowHighPriceCategoryService.refreshLowHighCategoryToDelete(displayProduct);
+
     }
 
     public void updateProductInCache(DisplayProduct displayProduct) {
         lowestPriceBrandService.refreshLowestPriceBrandToUpdate(displayProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToUpdate(displayProduct);
+        lowHighPriceCategoryService.refreshLowHighCategoryToUpdate(displayProduct);
+
     }
 }
