@@ -1,6 +1,8 @@
 package com.cody.domain.store.category.db;
 
 
+import static com.cody.common.core.Constants.formatter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +12,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,8 +44,8 @@ public class CategoryDAO {
 
     @PrePersist
     public void onPrePersist() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
         this.createdDate = parsedCreateDate;
         if(version == null) {
             this.version = 0L;
@@ -54,7 +55,7 @@ public class CategoryDAO {
 
     @PreUpdate
     public void onPreUpdate() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
+        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
     }
 }

@@ -1,18 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: redis-dev
+      on-profile: redis-local
   redis:
-    cluster:
-      max-redirects: 2
-      timeout: 3000
-      nodes:
-        - localhost:6371
-        - localhost:6372
-        - localhost:6373
-        - localhost:6374
-        - localhost:6375
-        - localhost:6376
-        - localhost:6377
-        - localhost:6378
-        - localhost:6379
+    host: localhost
+    port: 6379
