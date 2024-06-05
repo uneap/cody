@@ -1,29 +1,25 @@
 package com.cody.domain.store.cache.service;
 
-import static com.cody.domain.store.cache.constants.constants.PRICE_CATEGORY;
-
 import com.cody.domain.store.cache.dto.DisplayProduct;
+import com.cody.domain.store.cache.service.redis.FullProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class LowHighPriceCategoryService {
-    private final RedisTemplate<String, DisplayProduct> redisDisplayProductTemplate;
+    private final FullProductService fullProductService;
     public void refreshLowHighCategoryToAdd(DisplayProduct displayProduct) {
-        redisDisplayProductTemplate.opsForZSet().add(getLowHighPriceCategory(displayProduct.getCategoryId()), displayProduct, displayProduct.getProductPrice());
+        fullProductService.addByCategory(displayProduct);
     }
 
     public void refreshLowHighCategoryToDelete(DisplayProduct displayProduct) {
-        redisDisplayProductTemplate.opsForZSet().remove(getLowHighPriceCategory(displayProduct.getCategoryId()), displayProduct);
+        fullProductService.removeByCategory(displayProduct);
     }
 
     public void refreshLowHighCategoryToUpdate(DisplayProduct displayProduct) {
-        redisDisplayProductTemplate.opsForZSet().add(getLowHighPriceCategory(displayProduct.getCategoryId()), displayProduct, displayProduct.getProductPrice());
+        fullProductService.addByCategory(displayProduct);
     }
-    private String getLowHighPriceCategory(long categoryId) {
-        return String.format(PRICE_CATEGORY, categoryId);
-    }
+
 
 }

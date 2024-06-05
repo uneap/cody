@@ -19,6 +19,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class StorageRedisConfig {
     private final ObjectMapper objectMapper;
     private final RedisConnectionFactory redisConnectionFactory;
+
     @Bean
     public RedisTemplate<String, List<DisplayProduct>> redisDisplayProductsTemplate() {
         RedisTemplate<String, List<DisplayProduct>> redisTemplate = new RedisTemplate<>();

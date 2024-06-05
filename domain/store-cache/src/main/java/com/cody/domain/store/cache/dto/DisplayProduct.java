@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -14,7 +15,8 @@ public class DisplayProduct {
     private final String categoryName;
     private final String productName;
     private final long productPrice;
-    private final LocalDateTime lastUpdatedDateTime;
+    @Setter
+    private LocalDateTime lastUpdatedDateTime;
     private final long productId;
     @Override
     public boolean equals(Object obj) {
