@@ -1,15 +1,12 @@
 package com.cody.domain.store.brand.kafka;
 
-import static com.cody.common.core.Constants.BATCH_SIZE;
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.brand.BrandConverter;
-import com.cody.domain.store.brand.db.BrandService;
-import com.cody.domain.store.brand.dto.BrandRequestDTO;
-import java.util.HashMap;
+import com.cody.domain.store.cache.dto.DisplayProductRequest;
+import com.cody.domain.store.cache.service.ProductStorageService;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +32,8 @@ public class UpdatedBrandListener {
     @Value("${kafka.brand.retry.topic}")
     private String retryTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final BrandService brandService;
     private final BrandConverter brandConverter;
-    private final Map<MethodType, List<BrandRequestDTO>> brands = new HashMap<>();
+    private final ProductStorageService productStorageService;
 
     @RetryableTopic(
         backoff = @Backoff(delay = 10 * 1000, multiplier = 3, maxDelay = 10 * 60 * 1000),
@@ -56,23 +52,19 @@ public class UpdatedBrandListener {
         log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}",
             partitionId, offset, groupId, receivedTimestamp, payload);
         try {
-            List<BrandRequestDTO> brandDTOs = brandConverter.convertUpdatedBrands(payload);
-            if (CollectionUtils.isEmpty(brandDTOs)) {
+            List<DisplayProductRequest> displayProducts = brandConverter.convertUpdatedBrands(payload);
+            if (CollectionUtils.isEmpty(displayProducts)) {
                 return;
             }
-            brandConverter.addMethodTypeAndBrands(brands, brandDTOs);
-            if(brands.containsKey(MethodType.UPDATE) && brands.get(MethodType.UPDATE).size() >= BATCH_SIZE) {
-                List<BrandRequestDTO> brandsToUpdate = brandConverter.getSortedBrands(brands, MethodType.UPDATE);
-                //TODO: redis에 넣기
-                brands.get(MethodType.UPDATE).clear();
-            }
-            if(brands.containsKey(MethodType.DELETE) && brands.get(MethodType.DELETE).size() >= BATCH_SIZE) {
-                List<BrandRequestDTO> brandsToDelete = brandConverter.getSortedBrands(brands, MethodType.DELETE);
-                brands.get(MethodType.DELETE).clear();
-            }
-            if(brands.containsKey(MethodType.INSERT) && brands.get(MethodType.INSERT).size() >= BATCH_SIZE) {
-                List<BrandRequestDTO> brandsToInsert = brandConverter.getSortedBrands(brands, MethodType.INSERT);
-                brands.get(MethodType.INSERT).clear();
+            MethodType type = displayProducts.get(0).getMethodType();
+            for (DisplayProductRequest displayProduct : displayProducts){
+                if(type == MethodType.UPDATE) {
+                    productStorageService.updateProductInCache(displayProduct);
+                }if(type == MethodType.DELETE) {
+                    productStorageService.deleteProductInCache(displayProduct);
+                }if(type == MethodType.INSERT) {
+                    productStorageService.addProductInCache(displayProduct);
+                }
             }
             ack.acknowledge();
         } catch (Exception e) {

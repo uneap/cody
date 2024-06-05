@@ -16,17 +16,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class BrandKafkaSender {
-    @Value("${kafka.brand.topic}")
+public class ProductKafkaSender {
+    @Value("${kafka.product.topic}")
     private String topic;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Async("senderExecutor")
-    public void sendBrands(List<DisplayProductRequest> products) throws IllegalStateException {
+    public void sendProducts(List<DisplayProductRequest> brands) throws IllegalStateException {
         try {
-            String productsString = objectMapper.writeValueAsString(products);
-            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, productsString);
+            String brandsString = objectMapper.writeValueAsString(brands);
+            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, brandsString);
             future.whenComplete((result, ex) -> {
                 if(ex != null) {
                     log.error("kafka send error : {}", ex.toString());
