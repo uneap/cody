@@ -368,3 +368,164 @@ Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection wa
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 13 more
+2024-06-04 23:37:44.719426+09:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "CREATED_DATE" not found; SQL statement:
+insert into users (ver_no, name, created_date, last_modified_date) values (0, 'daeun', '2024-06-02T13:13:15', '2024-06-02T13:13:15') [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:759)
+	at org.h2.command.Parser.parseColumn(Parser.java:1190)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1175)
+	at org.h2.command.Parser.parseInsert(Parser.java:1549)
+	at org.h2.command.Parser.parsePrepared(Parser.java:719)
+	at org.h2.command.Parser.parse(Parser.java:592)
+	at org.h2.command.Parser.parse(Parser.java:564)
+	at org.h2.command.Parser.prepareCommand(Parser.java:483)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1345)
+	at org.h2.server.web.WebApp.query(WebApp.java:1143)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1109)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1096)
+	at org.h2.server.web.WebThread.process(WebThread.java:190)
+	at org.h2.server.web.WebThread.run(WebThread.java:103)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2024-06-04 23:37:44.740109+09:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "CREATED_DATE" not found; SQL statement:
+insert into seller (user_id, brand_id, created_date, last_modified_date, name, ver_no)  values (1,1, '2024-06-02T13:13:15', '2024-06-02T13:13:15', 'A', 0) [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:759)
+	at org.h2.command.Parser.parseColumn(Parser.java:1190)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1175)
+	at org.h2.command.Parser.parseInsert(Parser.java:1549)
+	at org.h2.command.Parser.parsePrepared(Parser.java:719)
+	at org.h2.command.Parser.parse(Parser.java:592)
+	at org.h2.command.Parser.parse(Parser.java:564)
+	at org.h2.command.Parser.prepareCommand(Parser.java:483)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1345)
+	at org.h2.server.web.WebApp.query(WebApp.java:1143)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1109)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1096)
+	at org.h2.server.web.WebThread.process(WebThread.java:190)
+	at org.h2.server.web.WebThread.run(WebThread.java:103)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2024-06-04 23:43:09.378429+09:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,2,1,5500,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a [*]insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,3,1,4200,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,4,1,9000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,5,1,2000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,6,1,1700,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,7,1,1800,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,8,1,2300,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')"; SQL statement:
+insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,2,1,5500,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,3,1,4200,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,4,1,9000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,5,1,2000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,6,1,1700,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,7,1,1800,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,8,1,2300,'2024-06-02T13:13:15','2024-06-02T13:13:15','a') [42000-224]
+2024-06-04 23:44:25.714742+09:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,2,1,5500,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a [*]insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,3,1,4200,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,4,1,9000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,5,1,2000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,6,1,1700,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,7,1,1800,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,8,1,2300,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')"; SQL statement:
+insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,2,1,5500,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,3,1,4200,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,4,1,9000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,5,1,2000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,6,1,1700,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,7,1,1800,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,8,1,2300,'2024-06-02T13:13:15','2024-06-02T13:13:15','a') [42000-224]
+2024-06-04 23:45:41.164208+09:00 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,3,1,4200,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a [*]insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,4,1,9000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,5,1,2000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,6,1,1700,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,7,1,1800,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')\000d\000a insert into product (ver_no, category_id,brand_id,price,\000d\000acreated_date,last_modified_date, name)\000d\000a values (0,8,1,2300,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')"; SQL statement:
+insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,3,1,4200,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,4,1,9000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,5,1,2000,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,6,1,1700,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,7,1,1800,'2024-06-02T13:13:15','2024-06-02T13:13:15','a')
+ insert into product (ver_no, category_id,brand_id,price,
+created_date,last_modified_date, name)
+ values (0,8,1,2300,'2024-06-02T13:13:15','2024-06-02T13:13:15','a') [42000-224]
+2024-06-05 00:19:27.526785+09:00 jdbc[5]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-224]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:218)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:135)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:811)
+	at org.h2.server.web.WebApp.login(WebApp.java:1039)
+	at org.h2.server.web.WebApp.process(WebApp.java:227)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:177)
+	at org.h2.server.web.WebThread.process(WebThread.java:154)
+	at org.h2.server.web.WebThread.run(WebThread.java:103)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 13 more
+2024-06-05 16:51:11.366000+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]CATEGORY"; expected "COMMIT, CREATE, CALL, CHECKPOINT, COMMENT"; SQL statement:
+CATEGORY [42001-224]
+2024-06-05 17:43:46.886553+09:00 jdbc[5]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-224]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:218)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:135)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:811)
+	at org.h2.server.web.WebApp.login(WebApp.java:1039)
+	at org.h2.server.web.WebApp.process(WebApp.java:227)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:177)
+	at org.h2.server.web.WebThread.process(WebThread.java:154)
+	at org.h2.server.web.WebThread.run(WebThread.java:103)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 13 more

@@ -2,22 +2,26 @@ package com.cody.domain.store.cache.dto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DisplayProduct {
-    private final long brandId;
-    private final String brandName;
-    private final long categoryId;
-    private final String categoryName;
-    private final String productName;
-    private final long productPrice;
+    private long brandId;
+    private String brandName;
+    private long categoryId;
+    private String categoryName;
+    private String productName;
+    private long productPrice;
     @Setter
     private LocalDateTime lastUpdatedDateTime;
-    private final long productId;
+    private long productId;
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof DisplayProduct product) {

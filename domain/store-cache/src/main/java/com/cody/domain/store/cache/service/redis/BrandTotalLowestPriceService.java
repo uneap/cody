@@ -1,8 +1,7 @@
 package com.cody.domain.store.cache.service.redis;
 
-import static com.cody.common.core.Constants.formatter;
-
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,12 +21,13 @@ public class BrandTotalLowestPriceService {
     public void add(long brandId, long totalPrice, LocalDateTime updateTime) {
         String timeKey = getBrandIdKey(brandId);
         String storedTime = redisCommonStringTemplate.opsForValue().get(timeKey);
-        if(storedTime != null && LocalDateTime.parse(storedTime, formatter).isAfter(updateTime)) {
+        if(storedTime != null && LocalDateTime.parse(storedTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).isAfter(updateTime)) {
             return;
         }
         redisCommonStringTemplate.opsForZSet().add(LOWEST_PRICE_BRAND_ZSET_KEY, Long.toString(brandId), totalPrice);
-        redisCommonStringTemplate.opsForValue().set(timeKey, updateTime.format(formatter));
+        redisCommonStringTemplate.opsForValue().set(timeKey, updateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
+
     public Set<String> get() {
         return redisCommonStringTemplate.opsForZSet().range(LOWEST_PRICE_BRAND_ZSET_KEY, 0, 0);
     }

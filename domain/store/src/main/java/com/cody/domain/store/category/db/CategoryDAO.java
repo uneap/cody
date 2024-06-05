@@ -1,7 +1,7 @@
 package com.cody.domain.store.category.db;
 
 
-import static com.cody.common.core.Constants.formatter;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,8 +44,8 @@ public class CategoryDAO {
 
     @PrePersist
     public void onPrePersist() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, ISO_LOCAL_DATE_TIME);
         this.createdDate = parsedCreateDate;
         if(version == null) {
             this.version = 0L;
@@ -55,7 +55,7 @@ public class CategoryDAO {
 
     @PreUpdate
     public void onPreUpdate() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
-        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
+        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, ISO_LOCAL_DATE_TIME);
     }
 }

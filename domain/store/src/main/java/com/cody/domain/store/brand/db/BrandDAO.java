@@ -1,7 +1,7 @@
 package com.cody.domain.store.brand.db;
 
 
-import static com.cody.common.core.Constants.formatter;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import com.cody.domain.store.brand.dto.BrandDTO;
 import jakarta.persistence.Column;
@@ -45,8 +45,8 @@ public class BrandDAO {
 
     @PrePersist
     public void onPrePersist() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, ISO_LOCAL_DATE_TIME);
         this.createdDate = parsedCreateDate;
         if(version == null) {
             this.version = 0L;
@@ -58,8 +58,8 @@ public class BrandDAO {
 
     @PreUpdate
     public void onPreUpdate() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
-        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
+        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, ISO_LOCAL_DATE_TIME);
     }
 
     public BrandDAO(BrandDTO brand) {

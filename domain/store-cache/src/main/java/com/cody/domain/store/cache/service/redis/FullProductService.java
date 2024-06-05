@@ -1,7 +1,7 @@
 package com.cody.domain.store.cache.service.redis;
 
-import static com.cody.common.core.Constants.formatter;
 import static com.cody.domain.store.cache.constants.constants.PRICE_CATEGORY;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import com.cody.domain.store.cache.dto.DisplayProduct;
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class FullProductService {
     private final RedisTemplate<String, String> redisCommonStringTemplate;
     private final RedisTemplate<String, DisplayProduct> redisDisplayProductTemplate;
     public void addByBrandAndCategory(DisplayProduct newProduct) {
-        String lowestPriceBrandZSetKey = getLowestPriceBrandZSetKey(newProduct.getBrandId(), newProduct.getCategoryId());
+        String lowestPriceBrandZSetKey = getLowestPriceBrandKey(newProduct.getBrandId(), newProduct.getCategoryId());
         add(newProduct, lowestPriceBrandZSetKey);
     }
     public void addByCategory(DisplayProduct newProduct) {
@@ -26,14 +26,14 @@ public class FullProductService {
     }
     public void add(DisplayProduct newProduct, String key) {
         String storedTime = redisCommonStringTemplate.opsForValue().get(key);
-        if(storedTime != null && LocalDateTime.parse(storedTime, formatter).isAfter(newProduct.getLastUpdatedDateTime())) {
+        if(storedTime != null && LocalDateTime.parse(storedTime, ISO_LOCAL_DATE_TIME).isAfter(newProduct.getLastUpdatedDateTime())) {
             return;
         }
-        redisDisplayProductTemplate.opsForZSet().add(key, newProduct, newProduct.getProductPrice());
-        redisCommonStringTemplate.opsForValue().set(key, newProduct.getLastUpdatedDateTime().format(formatter));
+        redisDisplayProductTemplate.opsForZSet().add("price:" + key, newProduct, newProduct.getProductPrice());
+        redisCommonStringTemplate.opsForValue().set("time" + key, newProduct.getLastUpdatedDateTime().format(ISO_LOCAL_DATE_TIME));
     }
     public void removeByBrandAndCategory(DisplayProduct newProduct) {
-        String lowestPriceBrandZSetKey = getLowestPriceBrandZSetKey(newProduct.getBrandId(), newProduct.getCategoryId());
+        String lowestPriceBrandZSetKey = getLowestPriceBrandKey(newProduct.getBrandId(), newProduct.getCategoryId());
         remove(newProduct, lowestPriceBrandZSetKey);
     }
 
@@ -46,19 +46,19 @@ public class FullProductService {
     }
 
     public Set<DisplayProduct> getByBrandAndCategory(DisplayProduct newProduct) {
-        String lowestPriceBrandZSetKey = getLowestPriceBrandZSetKey(newProduct.getBrandId(), newProduct.getCategoryId());
+        String lowestPriceBrandZSetKey = getLowestPriceBrandKey(newProduct.getBrandId(), newProduct.getCategoryId());
         return get(lowestPriceBrandZSetKey);
     }
 
-    public Set<DisplayProduct> getByCategory(DisplayProduct newProduct) {
-        String lowHighPriceCategoryKey = getLowHighPriceCategoryKey(newProduct.getCategoryId());
+    public Set<DisplayProduct> getByCategory(long categoryId) {
+        String lowHighPriceCategoryKey = getLowHighPriceCategoryKey(categoryId);
         return get(lowHighPriceCategoryKey);
     }
     public Set<DisplayProduct> get(String key) {
         return redisDisplayProductTemplate.opsForZSet().range(key, 0, 0);
     }
-    private String getLowestPriceBrandZSetKey(long brandId, long categoryId) {
-        return String.format("price:brandId:%d:categoryId:%d", brandId, categoryId);
+    private String getLowestPriceBrandKey(long brandId, long categoryId) {
+        return String.format("brandId:%d:categoryId:%d", brandId, categoryId);
     }
     private String getLowHighPriceCategoryKey(long categoryId) {
         return String.format(PRICE_CATEGORY, categoryId);
