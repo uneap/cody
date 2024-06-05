@@ -1,7 +1,7 @@
 package com.cody.domain.store.brand.db;
 
 import com.cody.domain.store.brand.dto.BrandDTO;
-import com.cody.domain.store.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.dto.BrandRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -24,7 +24,7 @@ public class BrandService {
     private final BrandRepository brandRepository;
 
     @Transactional
-    public List<BrandDTO> insertAll(List<BrandRequestDTO> brands) throws DataIntegrityViolationException {
+    public List<BrandDTO> insertAll(List<BrandRequest> brands) throws DataIntegrityViolationException {
         List<BrandDAO> brandDAOs = brands.stream().map(BrandDAO::new).toList();
         brandDAOs = brandRepository.saveAll(brandDAOs);
         if(!CollectionUtils.isEmpty(brandDAOs)) {
@@ -34,13 +34,13 @@ public class BrandService {
     }
 
     @Transactional
-    public BrandDTO insert(BrandRequestDTO brand) throws DataIntegrityViolationException {
+    public BrandDTO insert(BrandRequest brand) throws DataIntegrityViolationException {
         BrandDAO brandDAO = new BrandDAO(brand);
         brandDAO = brandRepository.save(brandDAO);
         return BrandDTO.daoBuilder(brandDAO);
     }
     @Transactional
-    public List<BrandDTO> updateBrands(List<BrandRequestDTO> brandDTOs) throws OptimisticLockingFailureException, EntityNotFoundException, DataIntegrityViolationException {
+    public List<BrandDTO> updateBrands(List<BrandRequest> brandDTOs) throws OptimisticLockingFailureException, EntityNotFoundException, DataIntegrityViolationException {
         List<BrandDAO> brandDAOs = brandDTOs.stream()
                                             .map(this::convertUpdatedBrandData)
                                             .collect(Collectors.toList());
@@ -51,7 +51,7 @@ public class BrandService {
         throw new DataIntegrityViolationException("update fail");
     }
 
-    public BrandDAO convertUpdatedBrandData(BrandRequestDTO brandDTO) throws EntityNotFoundException  {
+    public BrandDAO convertUpdatedBrandData(BrandRequest brandDTO) throws EntityNotFoundException  {
         Optional<BrandDAO> brandOptional = brandRepository.findById(brandDTO.getId());
         if(brandOptional.isEmpty()) {
              throw new EntityNotFoundException();
@@ -61,20 +61,20 @@ public class BrandService {
         return brandDAO;
     }
     @Transactional
-    public BrandDTO updateBrand(BrandRequestDTO brandDTO) throws OptimisticLockingFailureException, EntityNotFoundException {
+    public BrandDTO updateBrand(BrandRequest brandDTO) throws OptimisticLockingFailureException, EntityNotFoundException {
         BrandDAO brandDAO = convertUpdatedBrandData(brandDTO);
         brandDAO = brandRepository.save(brandDAO);
         return BrandDTO.daoBuilder(brandDAO);
     }
 
     @Transactional
-    public void deleteBrands(List<BrandRequestDTO> brandDTOs) throws EmptyResultDataAccessException, IllegalArgumentException {
-        List<Long> ids = brandDTOs.stream().map(BrandRequestDTO::getId).collect(Collectors.toList());
+    public void deleteBrands(List<BrandRequest> brandDTOs) throws EmptyResultDataAccessException, IllegalArgumentException {
+        List<Long> ids = brandDTOs.stream().map(BrandRequest::getId).collect(Collectors.toList());
         brandRepository.deleteAllById(ids);
     }
 
     @Transactional
-    public void deleteBrand(BrandRequestDTO brandDTO) throws EmptyResultDataAccessException, InvalidDataAccessApiUsageException {
+    public void deleteBrand(BrandRequest brandDTO) throws EmptyResultDataAccessException, InvalidDataAccessApiUsageException {
         brandRepository.deleteById(brandDTO.getId());
     }
 

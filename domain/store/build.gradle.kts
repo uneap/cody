@@ -7,6 +7,7 @@ dependencies {
     implementation(projects.resource.db)
     implementation(projects.resource.kafka)
     implementation(projects.common.core)
+    implementation(projects.domain.storeCache)
 
     implementation(libs.jackson)
     compileOnly(libs.lombok)
