@@ -11,7 +11,6 @@ import org.springframework.util.CollectionUtils;
 
 @Getter
 public class BrandResponse extends Response {
-
     private final List<String> failedBrandNames;
 
     public BrandResponse(List<DisplayProductRequest> queriedProducts,
