@@ -1,7 +1,8 @@
 package com.cody.domain.store.seller.db;
 
 import com.cody.domain.store.TestConfiguration;
-import com.cody.domain.store.seller.dto.SellerDTO;
+import com.cody.domain.store.admin.db.AdminService;
+import com.cody.domain.store.admin.dto.AdminDTO;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -18,17 +19,17 @@ import org.springframework.test.context.ContextConfiguration;
 @SpringBootTest
 @ContextConfiguration(classes = {TestConfiguration.class})
 @ActiveProfiles({"store-local", "db-local"})
-class SellerServiceTest {
+class AdminServiceTest {
     @Autowired
-    private SellerService sellerService;
+    private AdminService adminService;
     @Test
     void findAllById_SUCCESS() {
-        List<SellerDTO> sellerDTOList = sellerService.findAllById(Arrays.asList(1L));
-        Assertions.assertEquals(1, sellerDTOList.size());
+        List<AdminDTO> adminDTOList = adminService.findAllById(Arrays.asList(1L));
+        Assertions.assertEquals(1, adminDTOList.size());
     }
     @Test
     void findAllById_FAIL() {
-        List<SellerDTO> sellerDTOList = sellerService.findAllById(Arrays.asList(11L));
-        Assertions.assertNotEquals(2, sellerDTOList.size());
+        List<AdminDTO> adminDTOList = adminService.findAllById(Arrays.asList(11L));
+        Assertions.assertNotEquals(2, adminDTOList.size());
     }
 }

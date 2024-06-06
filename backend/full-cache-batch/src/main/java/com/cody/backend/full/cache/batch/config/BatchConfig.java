@@ -2,12 +2,15 @@ package com.cody.backend.full.cache.batch.config;
 
 import static com.cody.backend.full.cache.batch.constant.constants.DISPLAY_PRODUCT_JOB;
 import static com.cody.backend.full.cache.batch.constant.constants.DISPLAY_PRODUCT_STEP;
+import static com.cody.backend.full.cache.batch.constant.constants.FULL_USER_STEP;
 
 import com.cody.backend.full.cache.batch.listener.ChunkLoggingListener;
 import com.cody.backend.full.cache.batch.parameter.DateJobParametersIncrementer;
+import com.cody.backend.full.cache.batch.steps.AllUserReader;
 import com.cody.backend.full.cache.batch.steps.AllUserWriter;
 import com.cody.backend.full.cache.batch.steps.DisplayProductReader;
 import com.cody.backend.full.cache.batch.steps.DisplayProductWriter;
+import com.cody.domain.store.cache.dto.AllUser;
 import com.cody.domain.store.cache.dto.DisplayProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -43,7 +46,7 @@ public class BatchConfig {
 
     private final DisplayProductReader productReader;
     private final DisplayProductWriter productWriter;
-//    private final AllUserReader allUserReader;
+    private final AllUserReader allUserReader;
     private final AllUserWriter allUserWriter;
     private static final int chunkSize = 1000;
 
@@ -64,7 +67,7 @@ public class BatchConfig {
         return new JobBuilder(DISPLAY_PRODUCT_JOB, jobRepository)
             .incrementer(dateJobParametersIncrementer)
             .start(displayProductStep())
-//            .next(allUserStep())
+            .next(allUserStep())
             .build();
     }
 
@@ -79,14 +82,14 @@ public class BatchConfig {
             .build();
     }
 
-//    @Bean(name =FULL_USER_STEP)
-//    public Step allUserStep() {
-//        return new StepBuilder(FULL_USER_STEP, jobRepository)
-//            .<DisplayProduct,DisplayProduct>chunk(chunkSize, transactionManager)
-//            .reader(allUserReader)
-//            .writer(allUserWriter)
-//            .listener(chunkLoggingListener)
-//            .build();
-//    }
+    @Bean(name =FULL_USER_STEP)
+    public Step allUserStep() {
+        return new StepBuilder(FULL_USER_STEP, jobRepository)
+            .<AllUser,AllUser>chunk(chunkSize, transactionManager)
+            .reader(allUserReader)
+            .writer(allUserWriter)
+            .listener(chunkLoggingListener)
+            .build();
+    }
 
 }

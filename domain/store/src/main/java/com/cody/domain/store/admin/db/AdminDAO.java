@@ -1,8 +1,7 @@
-package com.cody.domain.store.seller.db;
+package com.cody.domain.store.admin.db;
 
 
-import com.cody.domain.store.brand.db.BrandDAO;
-import com.cody.domain.store.seller.dto.SellerDTO;
+import com.cody.domain.store.admin.dto.AdminDTO;
 import com.cody.domain.store.user.db.UserDAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,23 +26,21 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
-@Entity(name = "SELLER")
-@Table(name = "SELLER", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "name"),
-    @UniqueConstraint(columnNames = "id")
+@Entity(name = "ADMIN")
+@Table(name = "ADMIN", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "NAME"),
+    @UniqueConstraint(columnNames = "ID"),
+    @UniqueConstraint(columnNames = { "ID", "USER_ID" })
 })
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SellerDAO {
+public class AdminDAO {
     @Version
     @Column(name = "VER_NO", nullable = false)
     private Long version;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column
-    private String name;
 
     @Column(name = "CREATED_DATE", updatable = false)
     @CreatedDate
@@ -52,10 +49,6 @@ public class SellerDAO {
     @Column(name = "LAST_MODIFIED_DATE")
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BRAND_ID", referencedColumnName = "ID", updatable = false, insertable = true)
-    private BrandDAO brand;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID", updatable = false, insertable = true)
@@ -78,12 +71,10 @@ public class SellerDAO {
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public SellerDAO(SellerDTO sellerDTO, UserDAO user, BrandDAO brand) {
-        if(sellerDTO.getId() != null) {
-            this.id = sellerDTO.getId();
+    public AdminDAO(AdminDTO adminDTO, UserDAO user) {
+        if(adminDTO.getId() != null) {
+            this.id = adminDTO.getId();
         }
-        this.name = sellerDTO.getName();
         this.user = user;
-        this.brand = brand;
     }
 }

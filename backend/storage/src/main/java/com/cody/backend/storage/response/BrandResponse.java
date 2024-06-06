@@ -13,8 +13,7 @@ import org.springframework.util.CollectionUtils;
 public class BrandResponse extends Response {
     private final List<String> failedBrandNames;
 
-    public BrandResponse(List<DisplayProductRequest> queriedProducts,
-        List<DisplayProduct> request) {
+    public BrandResponse(List<DisplayProductRequest> queriedProducts, List<DisplayProduct> request) {
         Set<String> brandNames = queriedProducts.stream()
                                                 .map(DisplayProductRequest::getBrandName)
                                                 .collect(Collectors.toSet());

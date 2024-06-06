@@ -1,9 +1,9 @@
-package com.cody.domain.store.seller.db;
+package com.cody.domain.store.admin.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SellerRepository extends JpaRepository<SellerDAO, Long> {
+public interface AdminRepository extends JpaRepository<AdminDAO, Long> {
 
 }

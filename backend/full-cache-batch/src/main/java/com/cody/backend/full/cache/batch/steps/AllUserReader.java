@@ -36,8 +36,8 @@ public class AllUserReader extends JdbcCursorItemReader<AllUser> {
             return AllUser.builder()
                           .userId(rs.getLong("user_id"))
                           .userName(rs.getString("user_name"))
-                          .sellerId(rs.getLong("seller_id"))
-                          .sellerName(rs.getString("seller_name"))
+                          .adminId(rs.getLong("seller_id"))
+                          .adminName(rs.getString("seller_name"))
                           .lastUpdatedDateTime(
                               LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now())))
                           .build();
