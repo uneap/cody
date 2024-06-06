@@ -14,8 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DisplayProduct {
     private long brandId;
-    private String brandName;
     private long categoryId;
+    private String brandName;
     private String categoryName;
     private String productName;
     private long productPrice;

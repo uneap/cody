@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FullProductService {
-    // categoryId, brandAndCategoryId 마다 time 체크하는 Redis 추가
     private final RedisTemplate<String, String> redisCommonStringTemplate;
     private final RedisTemplate<String, DisplayProduct> redisDisplayProductTemplate;
     public void addByBrandAndCategory(DisplayProduct newProduct) {
@@ -30,6 +29,7 @@ public class FullProductService {
             return;
         }
         redisDisplayProductTemplate.opsForZSet().add("price:" + key, newProduct, newProduct.getProductPrice());
+        newProduct.setLastUpdatedDateTime(null);
         redisCommonStringTemplate.opsForValue().set("time" + key, newProduct.getLastUpdatedDateTime().format(ISO_LOCAL_DATE_TIME));
     }
     public void removeByBrandAndCategory(DisplayProduct newProduct) {
