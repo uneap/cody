@@ -2,6 +2,7 @@ package com.cody.backend.full.cache.batch.config;
 
 import static com.cody.backend.full.cache.batch.constant.constants.DISPLAY_PRODUCT_JOB;
 import static com.cody.backend.full.cache.batch.constant.constants.DISPLAY_PRODUCT_STEP;
+import static com.cody.backend.full.cache.batch.constant.constants.FULL_BRAND_STEP;
 import static com.cody.backend.full.cache.batch.constant.constants.FULL_USER_STEP;
 
 import com.cody.backend.full.cache.batch.listener.ChunkLoggingListener;
@@ -10,8 +11,11 @@ import com.cody.backend.full.cache.batch.steps.AllUserReader;
 import com.cody.backend.full.cache.batch.steps.AllUserWriter;
 import com.cody.backend.full.cache.batch.steps.DisplayProductReader;
 import com.cody.backend.full.cache.batch.steps.DisplayProductWriter;
+import com.cody.backend.full.cache.batch.steps.FullBrandReader;
+import com.cody.backend.full.cache.batch.steps.FullBrandWriter;
 import com.cody.domain.store.cache.dto.AllUser;
 import com.cody.domain.store.cache.dto.DisplayProduct;
+import com.cody.domain.store.cache.dto.FullBrand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -48,6 +52,8 @@ public class BatchConfig {
     private final DisplayProductWriter productWriter;
     private final AllUserReader allUserReader;
     private final AllUserWriter allUserWriter;
+    private final FullBrandReader fullBrandReader;
+    private final FullBrandWriter fullBrandWriter;
     private static final int chunkSize = 1000;
 
     @Bean
@@ -66,7 +72,8 @@ public class BatchConfig {
     public Job displayProductJob() {
         return new JobBuilder(DISPLAY_PRODUCT_JOB, jobRepository)
             .incrementer(dateJobParametersIncrementer)
-            .start(displayProductStep())
+            .start(fullBrandStep())
+            .next(displayProductStep())
             .next(allUserStep())
             .build();
     }
@@ -86,8 +93,20 @@ public class BatchConfig {
     public Step allUserStep() {
         return new StepBuilder(FULL_USER_STEP, jobRepository)
             .<AllUser,AllUser>chunk(chunkSize, transactionManager)
+            .allowStartIfComplete(true)
             .reader(allUserReader)
             .writer(allUserWriter)
+            .listener(chunkLoggingListener)
+            .build();
+    }
+
+    @Bean(name =FULL_BRAND_STEP)
+    public Step fullBrandStep() {
+        return new StepBuilder(FULL_BRAND_STEP, jobRepository)
+            .<FullBrand,FullBrand>chunk(chunkSize, transactionManager)
+            .allowStartIfComplete(true)
+            .reader(fullBrandReader)
+            .writer(fullBrandWriter)
             .listener(chunkLoggingListener)
             .build();
     }

@@ -1,6 +1,8 @@
 package com.cody.domain.store.admin.db;
 
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
 import com.cody.domain.store.admin.dto.AdminDTO;
 import com.cody.domain.store.user.db.UserDAO;
 import jakarta.persistence.Column;
@@ -56,18 +58,16 @@ public class AdminDAO {
 
     @PrePersist
     public void onPrePersist() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        this.createdDate = parsedCreateDate;
+        this.createdDate = LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()));
         if(version == null) {
             this.version = 0L;
         }
-        this.lastModifiedDate = parsedCreateDate;
+        this.lastModifiedDate = LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()));
     }
 
     @PreUpdate
     public void onPreUpdate() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 

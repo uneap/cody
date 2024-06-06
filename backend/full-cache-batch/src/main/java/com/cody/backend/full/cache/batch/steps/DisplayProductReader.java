@@ -39,7 +39,6 @@ public class DisplayProductReader extends JdbcCursorItemReader<DisplayProduct> {
                                  .brandId(rs.getLong("brand_id"))
                                  .productPrice(rs.getLong("product_price"))
                                  .productName(rs.getString("product_name"))
-                                 .brandName(rs.getString("brand_name"))
                                  .categoryId(rs.getLong("category_id"))
                                  .categoryName(rs.getString("category_name"))
                                  .lastUpdatedDateTime(LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now())))

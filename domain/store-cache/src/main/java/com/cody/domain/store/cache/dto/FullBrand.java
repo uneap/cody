@@ -9,23 +9,22 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-public class AllUser {
-    private long userId;
-    private Long adminId;
-    private String adminName;
-    private String userName;
-    private LocalDateTime lastUpdatedDateTime;
+public class FullBrand {
+
+    private String name;
+    private long id;
+    private LocalDateTime lastUpdatedTime;
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof AllUser user) {
-            return this.userId == user.userId;
+        if (obj instanceof FullBrand brand) {
+            return this.id == brand.id;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId);
+        return Objects.hash(id);
     }
 }

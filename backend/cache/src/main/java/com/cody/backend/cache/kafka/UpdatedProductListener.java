@@ -1,10 +1,10 @@
-package com.cody.domain.store.product.kafka;
+package com.cody.backend.cache.kafka;
 
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
+import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
-import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.domain.store.product.ProductConverter;
 import java.util.List;
 import java.util.Objects;

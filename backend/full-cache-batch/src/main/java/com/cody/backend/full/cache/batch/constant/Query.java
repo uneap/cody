@@ -11,4 +11,8 @@ public class Query {
     public static String getAllUserQuery() {
         return "select a.id as seller_id, u.id as user_id, u.name as user_name, a.name as seller_name from admin a join users u on a.id = u.id";
     }
+
+    public static String getFullBrandQuery() {
+        return "select name, id from brand";
+    }
 }

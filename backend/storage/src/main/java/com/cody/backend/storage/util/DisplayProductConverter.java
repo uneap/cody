@@ -14,15 +14,14 @@ import org.springframework.util.CollectionUtils;
 
 public class DisplayProductConverter {
 
-    public static List<BrandRequest> convertToBrandRequestDTO(MethodType methodType,
-        List<DisplayProduct> displayProducts) {
+    public static List<BrandRequest> convertToBrandRequestDTO(MethodType methodType, List<DisplayProduct> displayProducts) {
         if (CollectionUtils.isEmpty(displayProducts)) {
             return new ArrayList<>();
         }
         return displayProducts.stream()
-                              .map(brand -> BrandRequest.builder()
-                                                        .id(brand.getBrandId())
-                                                        .name(brand.getBrandName())
+                              .map(product -> BrandRequest.builder()
+                                                        .id(product.getBrandId())
+                                                        .name(product.getBrandName())
                                                         .methodType(methodType)
                                                         .build())
                               .collect(Collectors.toList());

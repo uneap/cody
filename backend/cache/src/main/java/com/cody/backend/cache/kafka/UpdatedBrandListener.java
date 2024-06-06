@@ -1,13 +1,16 @@
-package com.cody.domain.store.brand.kafka;
+package com.cody.backend.cache.kafka;
 
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
+import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.brand.BrandConverter;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
-import com.cody.domain.store.cache.service.RefreshProductService;
+import com.cody.domain.store.cache.dto.FullBrand;
+import com.cody.domain.store.cache.service.redis.FullBrandService;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -34,6 +37,7 @@ public class UpdatedBrandListener {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final BrandConverter brandConverter;
     private final RefreshProductService refreshProductService;
+    private final FullBrandService fullBrandService;
 
     @RetryableTopic(
         backoff = @Backoff(delay = 10 * 1000, multiplier = 3, maxDelay = 10 * 60 * 1000),
@@ -57,7 +61,20 @@ public class UpdatedBrandListener {
                 return;
             }
             MethodType type = displayProducts.get(0).getMethodType();
-
+            List<FullBrand> brands = displayProducts.stream().map(displayProduct -> FullBrand.builder()
+                                                                                             .id(displayProduct.getBrandId())
+                                                                                             .name(displayProduct.getBrandName())
+                                                                                             .lastUpdatedTime(displayProduct.getLastUpdatedDateTime())
+                                                                                             .build())
+                                                    .distinct()
+                                                    .collect(Collectors.toList());
+            if(type == MethodType.INSERT) {
+                fullBrandService.addAll(brands);
+            } if(type == MethodType.DELETE) {
+                fullBrandService.removeAll(brands.stream().map(FullBrand::getId).collect(Collectors.toList()));
+            } if(type == MethodType.UPDATE) {
+                fullBrandService.updateAll(brands);
+            }
             for (DisplayProductRequest displayProduct : displayProducts){
                 if(type == MethodType.UPDATE) {
                     refreshProductService.updateProductInCache(displayProduct, displayProduct.getOldProduct());

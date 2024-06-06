@@ -1,6 +1,8 @@
 package com.cody.domain.store.product.db;
 
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
 import com.cody.domain.store.brand.db.BrandDAO;
 import com.cody.domain.store.category.db.CategoryDAO;
 import com.cody.domain.store.product.dto.ProductDTO;
@@ -69,8 +71,7 @@ public class ProductDAO {
 
     @PrePersist
     public void onPrePersist() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()));
         this.createdDate = parsedCreateDate;
         if(version == null) {
             this.version = 0L;
@@ -80,8 +81,8 @@ public class ProductDAO {
 
     @PreUpdate
     public void onPreUpdate() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()));
+        this.lastModifiedDate = parsedCreateDate;
     }
 
     public ProductDAO(ProductDTO product, CategoryDAO category, BrandDAO brand) {
