@@ -11,6 +11,7 @@ public class AllUser {
     private final long sellerId;
     private final String sellerName;
     private final String userName;
+    private final long brandId;
     private final LocalDateTime lastUpdatedDateTime;
 
 }

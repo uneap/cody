@@ -2,7 +2,7 @@ package com.cody.domain.store.seller.db;
 
 
 import com.cody.domain.store.brand.db.BrandDAO;
-import com.cody.domain.store.seller.dto.UserDTO;
+import com.cody.domain.store.seller.dto.SellerDTO;
 import com.cody.domain.store.user.db.UserDAO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +28,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Entity(name = "SELLER")
+@Table(name = "SELLER", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "name"),
+    @UniqueConstraint(columnNames = "id")
+})
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SellerDAO {
@@ -35,6 +41,9 @@ public class SellerDAO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column
+    private String name;
 
     @Column(name = "CREATED_DATE", updatable = false)
     @CreatedDate
@@ -69,10 +78,11 @@ public class SellerDAO {
         this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public SellerDAO(UserDTO sellerDTO, UserDAO user, BrandDAO brand) {
+    public SellerDAO(SellerDTO sellerDTO, UserDAO user, BrandDAO brand) {
         if(sellerDTO.getId() != null) {
             this.id = sellerDTO.getId();
         }
+        this.name = sellerDTO.getName();
         this.user = user;
         this.brand = brand;
     }

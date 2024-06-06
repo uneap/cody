@@ -16,6 +16,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +29,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
+@Table(name = "PRODUCT", uniqueConstraints = {
+    @UniqueConstraint(columnNames = { "name", "brand" }),
+    @UniqueConstraint(columnNames = "id")
+})
 @Entity(name = "PRODUCT")
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

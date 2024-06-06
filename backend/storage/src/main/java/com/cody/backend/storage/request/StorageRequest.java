@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class StorageRequest {
-
     @JsonProperty("products")
     private List<DisplayProduct> displayProducts;
 }
