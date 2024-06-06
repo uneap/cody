@@ -4,7 +4,7 @@ import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX
 
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
-import com.cody.domain.store.cache.service.ProductStorageService;
+import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.domain.store.product.ProductConverter;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +32,7 @@ public class UpdatedProductListener {
     private String retryTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ProductConverter productConverter;
-    private final ProductStorageService productStorageService;
+    private final RefreshProductService refreshProductService;
 
     @RetryableTopic(
         backoff = @Backoff(delay = 10 * 1000, multiplier = 3, maxDelay = 10 * 60 * 1000),
@@ -50,14 +50,14 @@ public class UpdatedProductListener {
         Acknowledgment ack) {
         log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}", partitionId, offset, groupId, receivedTimestamp, payload);
         try {
-            List<DisplayProductRequest> brandDTOs = productConverter.convertUpdatedProducts(payload);
-            for (DisplayProductRequest product : brandDTOs) {
+            List<DisplayProductRequest> productDTOs = productConverter.convertUpdatedProducts(payload);
+            for (DisplayProductRequest product : productDTOs) {
                 if(product.getMethodType() == MethodType.UPDATE) {
-                    productStorageService.updateProductInCache(product);
+                    refreshProductService.updateProductInCache(product, product.getOldProduct());
                 } if(product.getMethodType() == MethodType.DELETE) {
-                    productStorageService.deleteProductInCache(product);
+                    refreshProductService.deleteProductInCache(product);
                 } if(product.getMethodType() == MethodType.INSERT) {
-                    productStorageService.addProductInCache(product);
+                    refreshProductService.addProductInCache(product);
                 }
             }
             ack.acknowledge();

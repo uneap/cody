@@ -2,16 +2,14 @@ package com.cody.domain.store.cache.dto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public class DisplayProduct {
     private long brandId;
     private long categoryId;

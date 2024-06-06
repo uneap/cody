@@ -5,6 +5,7 @@ import com.cody.backend.storage.response.ProductResponse;
 import com.cody.backend.storage.sender.ProductKafkaSender;
 import com.cody.backend.storage.service.ProductStorageService;
 import com.cody.backend.storage.util.DisplayProductConverter;
+import com.cody.backend.storage.util.ValidRequestChecker;
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.cache.dto.DisplayProduct;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
@@ -24,9 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductStorageController {
     private final ProductKafkaSender productKafkaSender;
     private final ProductStorageService productStorageService;
+    private final ValidRequestChecker validRequestChecker;
 
     @PostMapping(value = "/insert")
     public ProductResponse insertProducts(@RequestBody StorageRequest request) {
+        validRequestChecker.isNoneValid(request);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<ProductRequestDTO> productRequestDTOS = DisplayProductConverter.convertToProductRequestDTO(MethodType.INSERT, products);
         List<ProductRequestDTO> insertedProducts = productStorageService.insertProducts(productRequestDTOS);
@@ -37,6 +40,7 @@ public class ProductStorageController {
 
     @DeleteMapping(value = "/delete")
     public ProductResponse deleteProducts(@RequestBody StorageRequest request) {
+        validRequestChecker.isNoneValid(request);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<ProductRequestDTO> productRequestDTOS = DisplayProductConverter.convertToProductRequestDTO(MethodType.DELETE, products);
         List<ProductRequestDTO> deletedProducts = productStorageService.deleteProducts(productRequestDTOS);
@@ -47,6 +51,7 @@ public class ProductStorageController {
     }
     @PutMapping(value = "/update")
     public ProductResponse updateProducts(@RequestBody StorageRequest request) {
+        validRequestChecker.isNoneValid(request);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<ProductRequestDTO> productRequestDTOS = DisplayProductConverter.convertToProductRequestDTO(MethodType.UPDATE, products);
         List<ProductRequestDTO> updatedProducts = productStorageService.updateProducts(productRequestDTOS);

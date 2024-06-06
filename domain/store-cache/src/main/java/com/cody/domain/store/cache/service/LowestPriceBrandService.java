@@ -17,15 +17,20 @@ public class LowestPriceBrandService {
     private final BrandTotalLowestPriceService brandTotalLowestPriceService;
     private final LowestProductsService lowestProductsService;
     private final FullProductService fullProductService;
-
-    public List<DisplayProduct> getLowestPriceBrand() {
-        Set<String> lowestPriceBrandId = brandTotalLowestPriceService.get();
-        if(CollectionUtils.isEmpty(lowestPriceBrandId)) {
-            return new ArrayList<>();
+    public void refreshLowestPriceBrandToAdd(DisplayProduct product) {
+        List<DisplayProduct> products = lowestProductsService.getByBrand(product.getBrandId());
+        if (CollectionUtils.isEmpty(products)) {
+            addLowestPriceBrand(product, new ArrayList<>());
+            return;
         }
-        return lowestProductsService.getByBrand(Long.parseLong(lowestPriceBrandId.stream().findFirst().get()));
+        if(isNewLowest(product, products) || isNewCategory(product, products)) {
+            addLowestPriceBrand(product, products);
+            return;
+        }
+        fullProductService.addByBrandAndCategory(product);
     }
-    public void refreshLowestPriceBrandToUpdate(DisplayProduct product) {
+    public void refreshLowestPriceBrandToUpdate(DisplayProduct product, DisplayProduct oldProduct) {
+        fullProductService.removeByBrandAndCategory(oldProduct);
         fullProductService.addByBrandAndCategory(product);
         List<DisplayProduct> brandRankItems = lowestProductsService.getByBrand(product.getBrandId());
         if (CollectionUtils.isEmpty(brandRankItems)) {
@@ -62,7 +67,13 @@ public class LowestPriceBrandService {
         lowestPriceProduct.setLastUpdatedDateTime(product.getLastUpdatedDateTime());
         refreshLatestRanking(lowestPriceProduct, brandRankItems);
     }
-
+    public List<DisplayProduct> getLowestPriceBrand() {
+        Set<String> lowestPriceBrandId = brandTotalLowestPriceService.get();
+        if(CollectionUtils.isEmpty(lowestPriceBrandId)) {
+            return new ArrayList<>();
+        }
+        return lowestProductsService.getByBrand(Long.parseLong(lowestPriceBrandId.stream().findFirst().get()));
+    }
     private void refreshLatestRanking(DisplayProduct lowestPriceProduct, List<DisplayProduct> brandRankItems) {
         long totalPrice = brandRankItems.stream().filter(topProduct -> lowestPriceProduct.getProductId() != topProduct.getProductId())
                                   .mapToLong(DisplayProduct::getProductPrice).sum();
@@ -71,23 +82,9 @@ public class LowestPriceBrandService {
         brandTotalLowestPriceService.add(lowestPriceProduct.getBrandId(), totalPrice, lowestPriceProduct.getLastUpdatedDateTime());
     }
 
-    public void refreshLowestPriceBrandToAdd(DisplayProduct product) {
-        List<DisplayProduct> products = lowestProductsService.getByBrand(product.getBrandId());
-        if (CollectionUtils.isEmpty(products)) {
-            addLowestPriceBrand(product, new ArrayList<>());
-            return;
-        }
-        if(isNewLowest(product, products) || isNewCategory(product, products)) {
-            addLowestPriceBrand(product, products);
-            return;
-        }
-        fullProductService.addByBrandAndCategory(product);
-    }
-
     private boolean isNewCategory(DisplayProduct newProduct, List<DisplayProduct> products) {
         return products.stream().noneMatch(product -> product.getCategoryId() == newProduct.getCategoryId());
     }
-
 
     private DisplayProduct getSameLowestPrice(DisplayProduct addProduct, List<DisplayProduct> products) {
         return products.stream()

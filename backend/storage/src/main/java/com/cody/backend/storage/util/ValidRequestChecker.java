@@ -5,6 +5,7 @@ import com.cody.backend.storage.request.StorageRequest;
 import com.cody.domain.store.admin.db.AdminService;
 import com.cody.domain.store.admin.dto.AdminDTO;
 import com.cody.domain.store.cache.dto.AllUser;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ValidRequestChecker {
     private final AdminService adminService;
-    public void isNoneValid(StorageRequest storageRequest) {
+    public void isNoneValid(StorageRequest storageRequest) throws NoSuchElementException {
         if(storageRequest == null) {
             throw new InvalidDataAccessApiUsageException("EMPTY REQUEST");
         }

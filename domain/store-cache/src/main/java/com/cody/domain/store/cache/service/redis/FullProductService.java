@@ -5,21 +5,30 @@ import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import com.cody.domain.store.cache.dto.DisplayProduct;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FullProductService {
     private final RedisTemplate<String, String> redisCommonStringTemplate;
     private final RedisTemplate<String, DisplayProduct> redisDisplayProductTemplate;
     public void addByBrandAndCategory(DisplayProduct newProduct) {
+        if (newProduct.getProductId() == 0L) {
+            return;
+        }
         String lowestPriceBrandZSetKey = getLowestPriceBrandKey(newProduct.getBrandId(), newProduct.getCategoryId());
         add(newProduct, lowestPriceBrandZSetKey);
     }
     public void addByCategory(DisplayProduct newProduct) {
+        if (newProduct.getProductId() == 0L) {
+            return;
+        }
         String lowHighPriceCategoryKey = getLowHighPriceCategoryKey(newProduct.getCategoryId());
         add(newProduct, lowHighPriceCategoryKey);
     }
@@ -28,9 +37,11 @@ public class FullProductService {
         if(storedTime != null && LocalDateTime.parse(storedTime, ISO_LOCAL_DATE_TIME).isAfter(newProduct.getLastUpdatedDateTime())) {
             return;
         }
-        redisDisplayProductTemplate.opsForZSet().add("price:" + key, newProduct, newProduct.getProductPrice());
+        String updatedTime = newProduct.getLastUpdatedDateTime().format(ISO_LOCAL_DATE_TIME);
         newProduct.setLastUpdatedDateTime(null);
-        redisCommonStringTemplate.opsForValue().set("time" + key, newProduct.getLastUpdatedDateTime().format(ISO_LOCAL_DATE_TIME));
+        redisDisplayProductTemplate.opsForZSet().add("price:" + key, newProduct, newProduct.getProductPrice());
+        newProduct.setLastUpdatedDateTime(LocalDateTime.parse(updatedTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        redisCommonStringTemplate.opsForValue().set("time" + key, updatedTime);
     }
     public void removeByBrandAndCategory(DisplayProduct newProduct) {
         String lowestPriceBrandZSetKey = getLowestPriceBrandKey(newProduct.getBrandId(), newProduct.getCategoryId());

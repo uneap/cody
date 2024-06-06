@@ -17,7 +17,7 @@ public class LowHighPriceCategoryService {
         fullProductService.removeByCategory(displayProduct);
     }
 
-    public void refreshLowHighCategoryToUpdate(DisplayProduct displayProduct) {
+    public void refreshLowHighCategoryToUpdate(DisplayProduct displayProduct, DisplayProduct oldProduct) {
         fullProductService.addByCategory(displayProduct);
     }
 

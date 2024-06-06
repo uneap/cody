@@ -22,7 +22,6 @@ public class BrandStorageService {
 
     public List<BrandRequest> insertBrands(List<DisplayProduct> products) throws DataIntegrityViolationException, IllegalStateException {
         List<BrandRequest> brandRequests = DisplayProductConverter.convertToBrandRequestDTO(MethodType.INSERT, products);
-
         List<BrandDTO> brands = brandService.insertAll(brandRequests);
         return brands.stream()
                      .map(brand -> BrandRequest.dtoBuilder(brand, MethodType.INSERT))

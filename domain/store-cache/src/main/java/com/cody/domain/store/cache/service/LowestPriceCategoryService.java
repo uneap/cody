@@ -15,7 +15,7 @@ public class LowestPriceCategoryService {
     private final FullProductService fullProductService;
     private final LowestProductsService lowestProductsService;
 
-    public void refreshLowestPriceCategoryToUpdate(DisplayProduct product) {
+    public void refreshLowestPriceCategoryToUpdate(DisplayProduct product, DisplayProduct oldProduct) {
         List<DisplayProduct> lowestPriceProducts = lowestProductsService.getByCategory();
         fullProductService.addByCategory(product);
         if(isSameCategory(lowestPriceProducts, product.getCategoryId())) {

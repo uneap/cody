@@ -5,7 +5,7 @@ import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.brand.BrandConverter;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
-import com.cody.domain.store.cache.service.ProductStorageService;
+import com.cody.domain.store.cache.service.RefreshProductService;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class UpdatedBrandListener {
     private String retryTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final BrandConverter brandConverter;
-    private final ProductStorageService productStorageService;
+    private final RefreshProductService refreshProductService;
 
     @RetryableTopic(
         backoff = @Backoff(delay = 10 * 1000, multiplier = 3, maxDelay = 10 * 60 * 1000),
@@ -57,13 +57,14 @@ public class UpdatedBrandListener {
                 return;
             }
             MethodType type = displayProducts.get(0).getMethodType();
+
             for (DisplayProductRequest displayProduct : displayProducts){
                 if(type == MethodType.UPDATE) {
-                    productStorageService.updateProductInCache(displayProduct);
+                    refreshProductService.updateProductInCache(displayProduct, displayProduct.getOldProduct());
                 }if(type == MethodType.DELETE) {
-                    productStorageService.deleteProductInCache(displayProduct);
+                    refreshProductService.deleteProductInCache(displayProduct);
                 }if(type == MethodType.INSERT) {
-                    productStorageService.addProductInCache(displayProduct);
+                    refreshProductService.addProductInCache(displayProduct);
                 }
             }
             ack.acknowledge();

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BrandTotalLowestPriceService {
     //BrandId마다 time 체크 하는 redis 추가
+    //localDateTime 체크 완료
     private final RedisTemplate<String, String> redisCommonStringTemplate;
     private static final String LOWEST_PRICE_BRAND_ZSET_KEY = "priceBrand";
 

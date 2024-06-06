@@ -15,8 +15,7 @@ public class ProductResponse extends Response {
 
     private final Set<UniqueProduct> failedProducts;
 
-    public ProductResponse(List<DisplayProductRequest> queriedProducts,
-        List<DisplayProduct> request) {
+    public ProductResponse(List<DisplayProductRequest> queriedProducts, List<DisplayProduct> request) {
         Set<UniqueProduct> queriedUniqueProducts = queriedProducts.stream()
                                                                   .map(product -> UniqueProduct
                                                                       .builder()

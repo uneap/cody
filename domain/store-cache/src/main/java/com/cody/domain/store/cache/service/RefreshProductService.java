@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ProductStorageService {
+public class RefreshProductService {
     private final LowestPriceBrandService lowestPriceBrandService;
     private final LowestPriceCategoryService lowestPriceCategoryService;
     private final LowHighPriceCategoryService lowHighPriceCategoryService;
@@ -24,10 +24,10 @@ public class ProductStorageService {
 
     }
 
-    public void updateProductInCache(DisplayProduct displayProduct) {
-        lowestPriceBrandService.refreshLowestPriceBrandToUpdate(displayProduct);
-        lowestPriceCategoryService.refreshLowestPriceCategoryToUpdate(displayProduct);
-        lowHighPriceCategoryService.refreshLowHighCategoryToUpdate(displayProduct);
+    public void updateProductInCache(DisplayProduct displayProduct, DisplayProduct oldProduct) {
+        lowestPriceBrandService.refreshLowestPriceBrandToUpdate(displayProduct, oldProduct);
+        lowestPriceCategoryService.refreshLowestPriceCategoryToUpdate(displayProduct, oldProduct);
+        lowHighPriceCategoryService.refreshLowHighCategoryToUpdate(displayProduct, oldProduct);
 
     }
 }
