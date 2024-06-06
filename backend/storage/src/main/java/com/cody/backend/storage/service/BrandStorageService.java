@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service;
 public class BrandStorageService {
     private final BrandService brandService;
 
-    public List<BrandRequest> insertBrands(List<BrandRequest> brandRequests)
-        throws DataIntegrityViolationException, IllegalStateException {
+    public List<BrandRequest> insertBrands(List<BrandRequest> brandRequests) throws DataIntegrityViolationException, IllegalStateException {
         List<BrandDTO> brands = brandService.insertAll(brandRequests);
         return brands.stream()
                      .map(brand -> BrandRequest.dtoBuilder(brand, MethodType.INSERT))

@@ -1,7 +1,7 @@
 package com.cody.domain.store.seller.db;
 
 import com.cody.domain.store.TestConfiguration;
-import com.cody.domain.store.seller.dto.UserDTO;
+import com.cody.domain.store.seller.dto.SellerDTO;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +23,12 @@ class SellerServiceTest {
     private SellerService sellerService;
     @Test
     void findAllById_SUCCESS() {
-        List<UserDTO> sellerDTOList = sellerService.findAllById(Arrays.asList(1L));
+        List<SellerDTO> sellerDTOList = sellerService.findAllById(Arrays.asList(1L));
         Assertions.assertEquals(1, sellerDTOList.size());
     }
     @Test
     void findAllById_FAIL() {
-        List<UserDTO> sellerDTOList = sellerService.findAllById(Arrays.asList(11L));
+        List<SellerDTO> sellerDTOList = sellerService.findAllById(Arrays.asList(11L));
         Assertions.assertNotEquals(2, sellerDTOList.size());
     }
 }

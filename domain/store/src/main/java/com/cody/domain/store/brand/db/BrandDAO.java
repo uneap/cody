@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -22,6 +24,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Entity(name = "BRAND")
+@Table(name = "BRAND", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "name"),
+    @UniqueConstraint(columnNames = "id")
+})
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BrandDAO {
