@@ -58,10 +58,15 @@ public class UpdatedBrandListener {
         try {
             List<DisplayProductRequest> displayProducts = brandConverter.convertUpdatedBrands(payload);
             if (CollectionUtils.isEmpty(displayProducts)) {
+                ack.acknowledge();
+                log.error("[EXCEPTION] product is null");
                 return;
             }
             MethodType type = displayProducts.get(0).getMethodType();
-            List<FullBrand> brands = displayProducts.stream().map(displayProduct -> FullBrand.builder()
+            List<FullBrand> brands = displayProducts.stream()
+                                                    .filter(Objects::nonNull)
+                                                    .filter(DisplayProductRequest::isValid)
+                                                    .map(displayProduct -> FullBrand.builder()
                                                                                              .id(displayProduct.getBrandId())
                                                                                              .name(displayProduct.getBrandName())
                                                                                              .lastUpdatedTime(displayProduct.getLastUpdatedDateTime())
@@ -76,12 +81,12 @@ public class UpdatedBrandListener {
                 fullBrandService.updateAll(brands);
             }
             for (DisplayProductRequest displayProduct : displayProducts){
-                if(type == MethodType.UPDATE) {
-                    refreshProductService.updateProductInCache(displayProduct, displayProduct.getOldProduct());
-                }if(type == MethodType.DELETE) {
-                    refreshProductService.deleteProductInCache(displayProduct);
-                }if(type == MethodType.INSERT) {
-                    refreshProductService.addProductInCache(displayProduct);
+                if(displayProduct == null || !displayProduct.isValid()) {
+                    log.error("[EXCEPTION] brand input is invalid");
+                    continue;
+                }
+                if(type == MethodType.DELETE) {
+                    refreshProductService.deleteBrandInCache(displayProduct.getBrandId());
                 }
             }
             ack.acknowledge();

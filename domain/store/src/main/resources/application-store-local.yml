@@ -2,12 +2,4 @@ spring:
   config:
     activate:
       on-profile: store-local
-kafka:
-  brand:
-    retry:
-      topic: brand-retry-stream
-    topic: brand-stream
-  product:
-    retry:
-      topic: product-retry-stream
-    topic: product-stream
+
