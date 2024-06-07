@@ -1,9 +1,8 @@
-package com.cody.backend.storage.api;
+package com.cody.backend.display.api;
 
 import com.cody.common.core.Response;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
-import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -27,10 +26,5 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({EmptyResultDataAccessException.class, EntityNotFoundException.class, NoSuchElementException.class})
     protected Response handleEmptyResultException(RuntimeException e) {
         return new Response(HttpStatus.NO_CONTENT.value(), e.toString());
-    }
-
-    @ExceptionHandler({InvalidRequestException.class})
-    protected Response handleInvalidRequestException(RuntimeException e) {
-        return new Response(HttpStatus.UNAUTHORIZED.value(), e.toString());
     }
 }

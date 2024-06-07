@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cody/v1/brand/storage")
+@RequestMapping(path ="/cody/v1/brand/storage")
 @RequiredArgsConstructor
 public class BrandStorageController {
     private final BrandStorageService brandStorageService;

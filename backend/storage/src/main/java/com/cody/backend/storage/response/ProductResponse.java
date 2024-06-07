@@ -1,5 +1,6 @@
 package com.cody.backend.storage.response;
 
+import com.cody.common.core.Response;
 import com.cody.domain.store.cache.dto.DisplayProduct;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
 import com.cody.domain.store.product.dto.UniqueProduct;

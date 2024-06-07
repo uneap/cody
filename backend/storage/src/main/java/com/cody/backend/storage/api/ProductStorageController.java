@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cody/v1/product/storage")
+@RequestMapping(path ="/cody/v1/product/storage")
 @RequiredArgsConstructor
 public class ProductStorageController {
     private final ProductKafkaSender productKafkaSender;
