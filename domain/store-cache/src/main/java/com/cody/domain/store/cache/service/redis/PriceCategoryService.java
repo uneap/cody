@@ -28,7 +28,7 @@ public class PriceCategoryService {
 
     public Set<TypedTuple<String>> getBrandIdAndPrice(long categoryId, PriceLevel priceLevel) {
         return priceLevel == PriceLevel.LOWEST ? redisCommonStringTemplate.opsForZSet().rangeWithScores(getProductKey(priceLevel, categoryId), 0, 0)
-            : redisCommonStringTemplate.opsForZSet().reverseRangeWithScores(getProductKey(priceLevel, categoryId), -1, -1);
+            : redisCommonStringTemplate.opsForZSet().reverseRangeWithScores(getProductKey(priceLevel, categoryId), 0, 0);
     }
 
     public void refreshProduct(DisplayProduct newProduct, PriceLevel priceLevel) {

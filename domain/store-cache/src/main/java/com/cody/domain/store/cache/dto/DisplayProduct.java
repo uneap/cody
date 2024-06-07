@@ -2,6 +2,7 @@ package com.cody.domain.store.cache.dto;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class DisplayProduct {
         return Objects.hash(productId);
     }
 
+    @JsonIgnore
     public boolean isValid() {
         return brandId != 0L
             && categoryName != null

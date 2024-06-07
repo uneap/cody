@@ -23,4 +23,19 @@ public class LowestPriceBrandService {
         }
         return lowestPriceBrandIdService.get(Long.parseLong(lowestPriceBrandId.stream().findFirst().get()));
     }
+
+//    @Nullable
+//    private DisplayProduct convertDisplayProduct(long categoryId, Set<TypedTuple<String>> product, PriceLevel priceLevel) {
+//        if (CollectionUtils.isEmpty(product)) {
+//            return null;
+//        }
+//        TypedTuple<String> brandIdAndScore = product.stream().findFirst().get();
+//        long brandId = Long.parseLong(brandIdAndScore.getValue());
+//        if (PriceLevel.LOWEST == priceLevel) {
+//            return brandCategoryFullProductService.getLowestByBrandAndCategory(brandId, categoryId);
+//
+//        } else {
+//            return brandCategoryFullProductService.getHighestByBrandAndCategory(brandId, categoryId);
+//        }
+//    }
 }

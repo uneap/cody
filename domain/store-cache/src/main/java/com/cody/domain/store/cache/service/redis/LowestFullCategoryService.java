@@ -50,9 +50,14 @@ public class LowestFullCategoryService {
         return products.stream().anyMatch(product -> product.getCategoryId() == displayProduct.getCategoryId());
     }
     private boolean isChange(DisplayProduct newProduct, DisplayProduct product) {
-        return newProduct.getCategoryId() == product.getCategoryId()
-            && newProduct.getProductPrice() < product.getProductPrice()
-            && newProduct.getLastUpdatedDateTime().isAfter(product.getLastUpdatedDateTime());
+        if(newProduct.getCategoryId() == product.getCategoryId()
+            && newProduct.getLastUpdatedDateTime().isAfter(product.getLastUpdatedDateTime())) {
+            if(newProduct.getProductPrice() == product.getProductPrice()) {
+                return newProduct.getBrandName().compareTo(product.getBrandName()) > 0;
+            }
+            return newProduct.getProductPrice() < product.getProductPrice();
+        }
+        return false;
     }
     private boolean isSame(DisplayProduct newProduct, DisplayProduct product) {
         return newProduct.getProductId() == product.getProductId()

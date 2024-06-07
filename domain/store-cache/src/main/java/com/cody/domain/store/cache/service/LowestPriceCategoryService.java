@@ -13,7 +13,7 @@ public class LowestPriceCategoryService {
     private final BrandCategoryFullProductService brandCategoryFullProductService;
     private final LowestFullCategoryService lowestFullCategoryService;
 
-    public List<DisplayProduct> getLowestPriceCategoryService() {
+    public List<DisplayProduct> getLowestPriceCategories() {
         return lowestFullCategoryService.get();
     }
 }

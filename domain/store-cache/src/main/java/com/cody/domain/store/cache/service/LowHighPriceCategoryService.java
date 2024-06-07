@@ -28,8 +28,7 @@ public class LowHighPriceCategoryService {
     }
 
     @Nullable
-    private DisplayProduct convertDisplayProduct(long categoryId, Set<TypedTuple<String>> product,
-        PriceLevel priceLevel) {
+    private DisplayProduct convertDisplayProduct(long categoryId, Set<TypedTuple<String>> product, PriceLevel priceLevel) {
         if (CollectionUtils.isEmpty(product)) {
             return null;
         }
@@ -39,8 +38,7 @@ public class LowHighPriceCategoryService {
             return brandCategoryFullProductService.getLowestByBrandAndCategory(brandId, categoryId);
 
         } else {
-            return brandCategoryFullProductService.getHighestByBrandAndCategory(brandId,
-                categoryId);
+            return brandCategoryFullProductService.getHighestByBrandAndCategory(brandId, categoryId);
         }
     }
 

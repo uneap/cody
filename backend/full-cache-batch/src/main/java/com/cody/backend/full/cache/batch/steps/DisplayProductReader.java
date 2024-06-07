@@ -37,6 +37,7 @@ public class DisplayProductReader extends JdbcCursorItemReader<DisplayProduct> {
             return DisplayProduct.builder()
                                  .productId(rs.getLong("product_id"))
                                  .brandId(rs.getLong("brand_id"))
+                                 .brandName(rs.getString("brand_name"))
                                  .productPrice(rs.getLong("product_price"))
                                  .productName(rs.getString("product_name"))
                                  .categoryId(rs.getLong("category_id"))
