@@ -19,11 +19,15 @@
     - [x] 고객은 단일 브랜드로 전체 카테고리 상품을 구매할 경우 최저가격인 브랜드와 총액이 얼마인지 확인할 수 있음
     - [x] 고객은 특정 카테고리에서 최저가격 브랜드와 최고가격 브랜드를 확인하고 각 브랜드 상품의 가격을 확인할 수 있음
     - [x] 운영자는 새로운 브랜드를 등록하고, 모든 브랜드의 상품을 추가, 변경, 삭제할 수 있음
+    - [x] 운영자는 기존 브랜드를 삭제하고, 변경할 수 있음
     - [x] 운영자가 아닌 유저가 새 브랜드를 등록하려하면, 등록할 수 없음
     - [x] full-cache-batch 모듈 구성하여 DB에 저장된 데이터를 redis로 전체 풀캐싱할 수 있음
+    - [x] 운영자가 새로운 브랜드나 상품을 등록하거나 삭제, 변경하면, kafka를 통해 redis에 캐싱됨
     - [x] store모듈 unit test 추가
     - [x] store-cache 모듈 unit test 추가
     - [ ] display 애플리케이션 integration test 추가
+    - [ ] stroage 애플리케이션 integration test 추가
+    
 # 구동 방법 - intelliJ 기준
 
 ## 1. 인프라 실행
@@ -64,7 +68,18 @@ $ docker build . -t simple-redis
 # 컨테이너 생성 및 실행
 $ docker run -d --name simple-redis -p 6379:6379 simple-redis
 ```
-## 2. 
+## 2. full-cache-batch 실행
+
+풀캐시 배치 실행하면 test.mv.db에 저장된 데이터가 redis에 캐시되어 api 요청하기 수월해짐
+
+## 3. cache-server, storage-server 실행
+
+등록, 삭제, 업데이트 기능을 위해서는 해당 서버를 실행시켜야 함
+
+## 4. display-server 실행
+
+요구사항에 적힌대로 데이터 확인 가능함
+
 ## 사용 기술 및 고민 과정
 
 Spring Boot 3.2.3, Java 17, Kafka 3.4, H2, Redis
@@ -74,7 +89,7 @@ Spring Boot 3.2.3, Java 17, Kafka 3.4, H2, Redis
 - 유지보수가 쉽고, 코드 재사용성을 높일 수 있는지
     - 멀티모듈, MSA
 - 코드 역할에 대한 보충 설명을 어떻게 할지
-    - 테스트 코드를 통해 문서화 (시간이 부족하여 모든 기능에 테스트 코드를 붙이지 못한 점 양해 부탁드립니다.)
+    - 테스트 코드를 통해 문서화
 ## DB 스키마
 ```java
 create table BRAND (
