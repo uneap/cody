@@ -1,4 +1,4 @@
-package com.cody.backend.storage.sender;
+package com.cody.backend.storage.producer;
 
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,17 +16,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ProductKafkaSender {
-    @Value("${kafka.product.topic}")
+public class BrandKafkaSender {
+    @Value("${kafka.brand.topic}")
     private String topic;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Async("senderExecutor")
-    public void sendProducts(List<DisplayProductRequest> brands) throws IllegalStateException {
+    public void sendBrands(List<DisplayProductRequest> products) throws IllegalStateException {
         try {
-            String brandsString = objectMapper.writeValueAsString(brands);
-            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, brandsString);
+            String productsString = objectMapper.writeValueAsString(products);
+            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, productsString);
             future.whenComplete((result, ex) -> {
                 if(ex != null) {
                     log.error("kafka send error : {}", ex.toString());

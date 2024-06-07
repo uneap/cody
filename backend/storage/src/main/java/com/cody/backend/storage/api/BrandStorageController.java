@@ -2,7 +2,7 @@ package com.cody.backend.storage.api;
 
 import com.cody.backend.storage.request.StorageRequest;
 import com.cody.backend.storage.response.BrandResponse;
-import com.cody.backend.storage.sender.BrandKafkaSender;
+import com.cody.backend.storage.producer.BrandKafkaSender;
 import com.cody.backend.storage.service.BrandStorageService;
 import com.cody.backend.storage.util.DisplayProductConverter;
 import com.cody.backend.storage.util.ValidRequestChecker;

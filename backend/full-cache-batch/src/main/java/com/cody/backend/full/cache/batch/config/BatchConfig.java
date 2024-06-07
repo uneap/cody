@@ -5,8 +5,6 @@ import static com.cody.backend.full.cache.batch.constant.constants.DISPLAY_PRODU
 import static com.cody.backend.full.cache.batch.constant.constants.FULL_BRAND_STEP;
 import static com.cody.backend.full.cache.batch.constant.constants.FULL_USER_STEP;
 
-import com.cody.backend.full.cache.batch.listener.ChunkLoggingListener;
-import com.cody.backend.full.cache.batch.parameter.DateJobParametersIncrementer;
 import com.cody.backend.full.cache.batch.steps.AllUserReader;
 import com.cody.backend.full.cache.batch.steps.AllUserWriter;
 import com.cody.backend.full.cache.batch.steps.DisplayProductReader;

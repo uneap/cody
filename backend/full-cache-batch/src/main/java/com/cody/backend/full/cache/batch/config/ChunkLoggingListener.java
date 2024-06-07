@@ -1,4 +1,4 @@
-package com.cody.backend.full.cache.batch.listener;
+package com.cody.backend.full.cache.batch.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ChunkListener;

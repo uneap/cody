@@ -1,4 +1,4 @@
-package com.cody.backend.full.cache.batch.parameter;
+package com.cody.backend.full.cache.batch.config;
 
 import java.time.LocalDateTime;
 import org.springframework.batch.core.JobParameters;
