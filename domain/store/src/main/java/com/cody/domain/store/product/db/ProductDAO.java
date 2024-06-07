@@ -22,17 +22,17 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Table(name = "PRODUCT", uniqueConstraints = {
-    @UniqueConstraint(columnNames = { "name", "brand" }),
+    @UniqueConstraint(columnNames = { "name", "brand", "category" }),
     @UniqueConstraint(columnNames = "id")
 })
 @Entity(name = "PRODUCT")
@@ -85,7 +85,7 @@ public class ProductDAO {
         this.lastModifiedDate = parsedCreateDate;
     }
 
-    public ProductDAO(ProductDTO product, CategoryDAO category, BrandDAO brand) {
+    public ProductDAO(@NonNull ProductDTO product, CategoryDAO category, BrandDAO brand) {
         if(product.getId() != null) {
             this.id = product.getId();
         }

@@ -2,6 +2,7 @@ package com.cody.domain.store.cache.dto;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
@@ -40,7 +41,8 @@ public class DisplayProduct {
         return Objects.hash(productId);
     }
 
-    public boolean isValid() {
+    @JsonIgnore
+    public boolean isConsumeValid() {
         return brandId != 0L
             && categoryName != null
             && categoryId != 0L
@@ -50,6 +52,27 @@ public class DisplayProduct {
             && productId != 0L
             && lastUpdatedDateTime != null;
     }
+
+    @JsonIgnore
+    public boolean isValid() {
+        return brandId != 0L
+            && categoryName != null
+            && categoryId != 0L
+            && brandName != null
+            && productName != null
+            && productPrice != 0L
+            && productId != 0L;
+    }
+    @JsonIgnore
+    public boolean isInsertValid() {
+        return categoryName != null
+            && categoryId != 0L
+            && brandName != null
+            && brandId != 0L
+            && productName != null
+            && productPrice != 0L;
+    }
+
 
     public DisplayProduct(ZSetProduct zSetProduct, String brandName, long productPrice, String time) {
         this.productId = zSetProduct.getProductId();

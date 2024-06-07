@@ -1,8 +1,8 @@
 package com.cody.backend.storage.api;
 
+import com.cody.backend.storage.producer.ProductKafkaSender;
 import com.cody.backend.storage.request.StorageRequest;
 import com.cody.backend.storage.response.ProductResponse;
-import com.cody.backend.storage.producer.ProductKafkaSender;
 import com.cody.backend.storage.service.ProductStorageService;
 import com.cody.backend.storage.util.DisplayProductConverter;
 import com.cody.backend.storage.util.ValidRequestChecker;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cody/v1/product/storage")
+@RequestMapping(path ="/cody/v1/product/storage")
 @RequiredArgsConstructor
 public class ProductStorageController {
     private final ProductKafkaSender productKafkaSender;
@@ -29,7 +29,7 @@ public class ProductStorageController {
 
     @PostMapping(value = "/insert")
     public ProductResponse insertProducts(@RequestBody StorageRequest request) {
-        validRequestChecker.isNoneValid(request);
+        validRequestChecker.isNoneValidByProduct(request, MethodType.INSERT);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<ProductRequestDTO> productRequestDTOS = DisplayProductConverter.convertToProductRequestDTO(MethodType.INSERT, products);
         List<ProductRequestDTO> insertedProducts = productStorageService.insertProducts(productRequestDTOS);
@@ -40,7 +40,7 @@ public class ProductStorageController {
 
     @DeleteMapping(value = "/delete")
     public ProductResponse deleteProducts(@RequestBody StorageRequest request) {
-        validRequestChecker.isNoneValid(request);
+        validRequestChecker.isNoneValidByProduct(request, MethodType.DELETE);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<ProductRequestDTO> productRequestDTOS = DisplayProductConverter.convertToProductRequestDTO(MethodType.DELETE, products);
         List<ProductRequestDTO> deletedProducts = productStorageService.deleteProducts(productRequestDTOS);
@@ -51,7 +51,7 @@ public class ProductStorageController {
     }
     @PutMapping(value = "/update")
     public ProductResponse updateProducts(@RequestBody StorageRequest request) {
-        validRequestChecker.isNoneValid(request);
+        validRequestChecker.isNoneValidByProduct(request, MethodType.UPDATE);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<ProductRequestDTO> productRequestDTOS = DisplayProductConverter.convertToProductRequestDTO(MethodType.UPDATE, products);
         List<ProductRequestDTO> updatedProducts = productStorageService.updateProducts(productRequestDTOS);

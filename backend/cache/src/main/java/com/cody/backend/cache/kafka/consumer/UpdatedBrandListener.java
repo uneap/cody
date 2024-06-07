@@ -2,11 +2,11 @@ package com.cody.backend.cache.kafka.consumer;
 
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
-import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.brand.BrandConverter;
-import com.cody.domain.store.cache.dto.DisplayProductRequest;
+import com.cody.domain.store.brand.dto.BrandRequest;
 import com.cody.domain.store.cache.dto.FullBrand;
+import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.domain.store.cache.service.redis.FullBrandService;
 import java.util.List;
 import java.util.Objects;
@@ -56,20 +56,20 @@ public class UpdatedBrandListener {
         log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}",
             partitionId, offset, groupId, receivedTimestamp, payload);
         try {
-            List<DisplayProductRequest> displayProducts = brandConverter.convertUpdatedBrands(payload);
+            List<BrandRequest> displayProducts = brandConverter.convertUpdatedBrands(payload);
             if (CollectionUtils.isEmpty(displayProducts)) {
                 ack.acknowledge();
-                log.error("[EXCEPTION] product is null");
+                log.error("[EXCEPTION] brand is null");
                 return;
             }
             MethodType type = displayProducts.get(0).getMethodType();
             List<FullBrand> brands = displayProducts.stream()
                                                     .filter(Objects::nonNull)
-                                                    .filter(DisplayProductRequest::isValid)
-                                                    .map(displayProduct -> FullBrand.builder()
-                                                                                             .id(displayProduct.getBrandId())
-                                                                                             .name(displayProduct.getBrandName())
-                                                                                             .lastUpdatedTime(displayProduct.getLastUpdatedDateTime())
+                                                    .filter(BrandRequest::isConsumeValid)
+                                                    .map(brandRequest -> FullBrand.builder()
+                                                                                             .id(brandRequest.getId())
+                                                                                             .name(brandRequest.getName())
+                                                                                             .lastUpdatedTime(brandRequest.getLastModifiedDate())
                                                                                              .build())
                                                     .distinct()
                                                     .collect(Collectors.toList());
@@ -80,13 +80,13 @@ public class UpdatedBrandListener {
             } if(type == MethodType.UPDATE) {
                 fullBrandService.updateAll(brands);
             }
-            for (DisplayProductRequest displayProduct : displayProducts){
-                if(displayProduct == null || !displayProduct.isValid()) {
+            for (BrandRequest brandRequest : displayProducts){
+                if(brandRequest == null || !brandRequest.isConsumeValid()) {
                     log.error("[EXCEPTION] brand input is invalid");
                     continue;
                 }
                 if(type == MethodType.DELETE) {
-                    refreshProductService.deleteBrandInCache(displayProduct.getBrandId());
+                    refreshProductService.deleteBrandInCache(brandRequest.getId());
                 }
             }
             ack.acknowledge();

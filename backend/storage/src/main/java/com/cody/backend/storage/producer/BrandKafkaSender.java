@@ -1,6 +1,6 @@
 package com.cody.backend.storage.producer;
 
-import com.cody.domain.store.cache.dto.DisplayProductRequest;
+import com.cody.domain.store.brand.dto.BrandRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -23,7 +23,7 @@ public class BrandKafkaSender {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Async("senderExecutor")
-    public void sendBrands(List<DisplayProductRequest> products) throws IllegalStateException {
+    public void sendBrands(List<BrandRequest> products) throws IllegalStateException {
         try {
             String productsString = objectMapper.writeValueAsString(products);
             CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, productsString);

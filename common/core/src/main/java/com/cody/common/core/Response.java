@@ -1,4 +1,4 @@
-package com.cody.backend.storage.response;
+package com.cody.common.core;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

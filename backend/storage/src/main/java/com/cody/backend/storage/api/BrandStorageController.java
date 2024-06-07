@@ -1,15 +1,14 @@
 package com.cody.backend.storage.api;
 
-import com.cody.backend.storage.request.StorageRequest;
-import com.cody.backend.storage.response.BrandResponse;
 import com.cody.backend.storage.producer.BrandKafkaSender;
+import com.cody.backend.storage.request.BrandStorageRequest;
+import com.cody.backend.storage.response.BrandResponse;
 import com.cody.backend.storage.service.BrandStorageService;
 import com.cody.backend.storage.util.DisplayProductConverter;
 import com.cody.backend.storage.util.ValidRequestChecker;
 import com.cody.common.core.MethodType;
+import com.cody.domain.store.brand.dto.BrandDTO;
 import com.cody.domain.store.brand.dto.BrandRequest;
-import com.cody.domain.store.cache.dto.DisplayProduct;
-import com.cody.domain.store.cache.dto.DisplayProductRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cody/v1/brand/storage")
+@RequestMapping(path ="/cody/v1/brand/storage")
 @RequiredArgsConstructor
 public class BrandStorageController {
     private final BrandStorageService brandStorageService;
@@ -28,32 +27,36 @@ public class BrandStorageController {
     private final ValidRequestChecker validRequestChecker;
 
     @PostMapping(value = "/insert")
-    public BrandResponse insertBrands(@RequestBody StorageRequest request) {
-        validRequestChecker.isNoneValid(request);
-        List<DisplayProduct> products = request.getDisplayProducts();
-        List<BrandRequest> insertedBrands = brandStorageService.insertBrands(products);
+    public BrandResponse insertBrands(@RequestBody BrandStorageRequest request) {
+        validRequestChecker.isNoneValidByBrand(request, MethodType.INSERT);
+        List<BrandDTO> brandDTOs = request.getBrands();
+        List<BrandRequest> brands = DisplayProductConverter.convertToBrandRequestDTO(MethodType.INSERT, brandDTOs);
+        List<BrandRequest> insertedBrands = brandStorageService.insertBrands(brands);
+        brandKafkaSender.sendBrands(insertedBrands);
 
-        return new BrandResponse(insertedBrands, products);
+        return new BrandResponse(insertedBrands, brandDTOs);
     }
 
     @DeleteMapping(value = "/delete")
-    public BrandResponse deleteBrands(@RequestBody StorageRequest request) {
-        validRequestChecker.isNoneValid(request);
-        List<DisplayProduct> products = request.getDisplayProducts();
-        List<BrandRequest> deletedBrands = brandStorageService.deleteBrands(products);
-        List<DisplayProductRequest> deletedProducts = DisplayProductConverter.convertBrandToDisplayProduct(products, deletedBrands, MethodType.DELETE);
-        brandKafkaSender.sendBrands(deletedProducts);
+    public BrandResponse deleteBrands(@RequestBody BrandStorageRequest request) {
+        validRequestChecker.isNoneValidByBrand(request, MethodType.DELETE);
+        List<BrandDTO> brandDTOs = request.getBrands();
+        List<BrandRequest> brands = DisplayProductConverter.convertToBrandRequestDTO(MethodType.DELETE, brandDTOs);
+        List<BrandRequest> deletedBrands = brandStorageService.deleteBrands(brands);
+        brandKafkaSender.sendBrands(deletedBrands);
 
-        return new BrandResponse(deletedBrands, products);
+        return new BrandResponse(deletedBrands, brandDTOs);
 
     }
 
     @PutMapping(value = "/update")
-    public BrandResponse updateBrands(@RequestBody StorageRequest request) {
-        validRequestChecker.isNoneValid(request);
-        List<DisplayProduct> products = request.getDisplayProducts();
-        List<BrandRequest> updatedBrands = brandStorageService.updateBrands(products);
+    public BrandResponse updateBrands(@RequestBody BrandStorageRequest request) {
+        validRequestChecker.isNoneValidByBrand(request, MethodType.UPDATE);
+        List<BrandDTO> brandDTOs = request.getBrands();
+        List<BrandRequest> brands = DisplayProductConverter.convertToBrandRequestDTO(MethodType.UPDATE, brandDTOs);
+        List<BrandRequest> updatedBrands = brandStorageService.updateBrands(brands);
+        brandKafkaSender.sendBrands(updatedBrands);
 
-        return new BrandResponse(updatedBrands, products);
+        return new BrandResponse(updatedBrands, brandDTOs);
     }
 }

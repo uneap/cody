@@ -1,6 +1,6 @@
 package com.cody.domain.store.brand;
 
-import com.cody.domain.store.cache.dto.DisplayProductRequest;
+import com.cody.domain.store.brand.dto.BrandRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BrandConverter {
     private final ObjectMapper objectMapper;
-    public List<DisplayProductRequest> convertUpdatedBrands(String payload) {
+    public List<BrandRequest> convertUpdatedBrands(String payload) {
         try {
             return objectMapper.readValue(payload, new TypeReference<>() {});
         } catch (JsonProcessingException e) {

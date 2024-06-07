@@ -4,7 +4,6 @@ import com.cody.domain.store.cache.dto.DisplayProduct;
 import com.cody.domain.store.cache.dto.LowHighProduct;
 import com.cody.domain.store.cache.dto.PriceLevel;
 import com.cody.domain.store.cache.service.redis.BrandCategoryFullProductService;
-import com.cody.domain.store.cache.service.redis.PriceBrandService;
 import com.cody.domain.store.cache.service.redis.PriceCategoryService;
 import io.micrometer.common.lang.Nullable;
 import java.util.Set;
@@ -16,9 +15,8 @@ import org.springframework.util.CollectionUtils;
 @Service
 @RequiredArgsConstructor
 public class LowHighPriceCategoryService {
-    private final BrandCategoryFullProductService brandCategoryFullProductService; // 4
-    private final PriceBrandService priceBrandService; // 5
-    private final PriceCategoryService priceCategoryService; //6
+    private final BrandCategoryFullProductService brandCategoryFullProductService;
+    private final PriceCategoryService priceCategoryService;
 
     public LowHighProduct getLowHighProduct(long categoryId) {
         Set<TypedTuple<String>> lowestBrand = priceCategoryService.getBrandIdAndPrice(categoryId, PriceLevel.LOWEST);
@@ -30,8 +28,7 @@ public class LowHighPriceCategoryService {
     }
 
     @Nullable
-    private DisplayProduct convertDisplayProduct(long categoryId, Set<TypedTuple<String>> product,
-        PriceLevel priceLevel) {
+    private DisplayProduct convertDisplayProduct(long categoryId, Set<TypedTuple<String>> product, PriceLevel priceLevel) {
         if (CollectionUtils.isEmpty(product)) {
             return null;
         }
@@ -41,9 +38,9 @@ public class LowHighPriceCategoryService {
             return brandCategoryFullProductService.getLowestByBrandAndCategory(brandId, categoryId);
 
         } else {
-            return brandCategoryFullProductService.getHighestByBrandAndCategory(brandId,
-                categoryId);
+            return brandCategoryFullProductService.getHighestByBrandAndCategory(brandId, categoryId);
         }
     }
+
 
 }

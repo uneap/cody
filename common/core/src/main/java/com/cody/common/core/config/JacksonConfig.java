@@ -1,4 +1,4 @@
-package com.cody.common.core;
+package com.cody.common.core.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

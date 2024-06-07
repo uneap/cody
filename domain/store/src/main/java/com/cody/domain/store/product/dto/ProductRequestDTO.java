@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class ProductRequestDTO extends ProductDTO implements Comparable<ProductRequestDTO> {
     private MethodType methodType;
+    private ProductRequestDTO oldProduct;
 
     @Override
     public int compareTo(ProductRequestDTO o) {

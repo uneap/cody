@@ -4,17 +4,22 @@ package com.cody.domain.store.brand.db;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import com.cody.domain.store.brand.dto.BrandDTO;
+import com.cody.domain.store.product.db.ProductDAO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +54,8 @@ public class BrandDAO {
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
 
+    @OneToMany(mappedBy = "brand", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ProductDAO> products;
     @PrePersist
     public void onPrePersist() {
         String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);

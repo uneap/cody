@@ -3,6 +3,7 @@ package com.cody.domain.store.cache.dto;
 import com.cody.common.core.MethodType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -12,18 +13,17 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class DisplayProductRequest extends DisplayProduct {
     private MethodType methodType;
+    @Setter
     private DisplayProduct oldProduct;
-    public DisplayProductRequest(MethodType methodType) {
-        super();
-        this.methodType = methodType;
-    }
+
     @Override
     public boolean isValid() {
-        return super.isValid() && oldProduct != null && oldProduct.isValid() && methodType != null;
-    }
-    public DisplayProductRequest(MethodType methodType, DisplayProduct oldProduct) {
-        super();
-        this.methodType = methodType;
-        this.oldProduct = oldProduct;
+        if(methodType == null) {
+            return false;
+        }
+        if(methodType == MethodType.INSERT) {
+            return super.isValid();
+        }
+        return super.isValid() && oldProduct != null && oldProduct.isValid();
     }
 }

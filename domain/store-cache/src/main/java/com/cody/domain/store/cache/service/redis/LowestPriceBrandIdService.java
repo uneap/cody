@@ -46,7 +46,7 @@ public class LowestPriceBrandIdService {
     }
 
     public void removeBrand(long brandId) {
-        redisDisplayProductsTemplate.opsForValue().getAndExpire(getKey(brandId), 0L, TimeUnit.MILLISECONDS);
+        redisDisplayProductsTemplate.opsForValue().getAndExpire(getKey(brandId), 1L, TimeUnit.MILLISECONDS);
     }
 
     private boolean isSameCategory(List<DisplayProduct> products, DisplayProduct displayProduct) {

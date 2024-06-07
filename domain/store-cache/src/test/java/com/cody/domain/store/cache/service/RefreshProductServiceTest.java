@@ -25,6 +25,8 @@ class RefreshProductServiceTest {
     private RefreshProductService refreshProductService;
     @Autowired
     private BrandCategoryFullProductService brandCategoryFullProductService;
+    @Autowired
+    private LowestPriceCategoryService lowestPriceCategoryService;
     @Test
     void addProductInCache_2() {
         DisplayProduct product = DisplayProduct.builder()
@@ -38,8 +40,10 @@ class RefreshProductServiceTest {
     }
     @Test
     void deleteBrandInCache() {
-        refreshProductService.deleteBrandInCache(17);
-        Assertions.assertThrows(NullPointerException.class,()-> brandCategoryFullProductService.getLowestByBrandAndCategory(17,1).getBrandId());
+        refreshProductService.deleteBrandInCache(1);
+        Assertions.assertFalse(lowestPriceCategoryService.getLowestPriceCategories()
+                                                         .stream()
+                                                         .anyMatch(product -> product.getBrandName().equals("A")));
     }
 
     @Test

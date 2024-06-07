@@ -46,7 +46,12 @@ public class RefreshProductService {
             }
             TypedTuple<String> brandIdAndPrice = brandIdAndPriceSet.stream().findFirst().get();
             DisplayProduct newProduct = brandCategoryFullProductService.getLowestByBrandAndCategory(Long.parseLong(brandIdAndPrice.getValue()), categoryId);
-            products.replaceAll(product-> product.getCategoryId() == categoryId ? newProduct : product);
+            if(newProduct == null) {
+                products.removeIf(product -> product.getCategoryId() == categoryId);
+            } else {
+                products.replaceAll(product -> product.getCategoryId() == categoryId ? newProduct : product);
+            }
+            lowestFullCategoryService.forceRefreshProductList(products);
         }
     }
 

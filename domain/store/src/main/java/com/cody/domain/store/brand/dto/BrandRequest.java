@@ -18,13 +18,18 @@ public class BrandRequest extends BrandDTO implements Comparable<BrandRequest> {
         return this.getLastModifiedDate().compareTo(o.getLastModifiedDate());
     }
 
-    public static BrandRequest dtoBuilder(BrandDTO brandDAO, MethodType type) {
+    public static BrandRequest dtoBuilder(BrandDTO brandDTO, MethodType type) {
         return builder()
-            .id(brandDAO.getId())
-            .name(brandDAO.getName())
-            .createdDate(brandDAO.getCreatedDate())
-            .lastModifiedDate(brandDAO.getLastModifiedDate())
+            .id(brandDTO.getId())
+            .name(brandDTO.getName())
+            .createdDate(brandDTO.getCreatedDate())
+            .lastModifiedDate(brandDTO.getLastModifiedDate())
             .methodType(type)
-            .version(brandDAO.getVersion()).build();
+            .version(brandDTO.getVersion()).build();
+    }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() &&  methodType != null;
     }
 }
