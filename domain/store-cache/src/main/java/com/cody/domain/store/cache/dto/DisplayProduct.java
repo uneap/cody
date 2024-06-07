@@ -40,6 +40,17 @@ public class DisplayProduct {
         return Objects.hash(productId);
     }
 
+    public boolean isValid() {
+        return brandId != 0L
+            && categoryName != null
+            && categoryId != 0L
+            && brandName != null
+            && productName != null
+            && productPrice != 0L
+            && productId != 0L
+            && lastUpdatedDateTime != null;
+    }
+
     public DisplayProduct(ZSetProduct zSetProduct, String brandName, long productPrice, String time) {
         this.productId = zSetProduct.getProductId();
         this.brandId = zSetProduct.getBrandId();

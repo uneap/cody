@@ -3,9 +3,8 @@ spring:
     group:
       local:
         - local
+        - kafka-local
         - store-local
         - db-local
-        - kafka-local
         - redis-local
     active: local
-

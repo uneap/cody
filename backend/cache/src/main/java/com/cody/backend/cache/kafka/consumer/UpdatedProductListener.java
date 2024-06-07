@@ -23,6 +23,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Component
@@ -51,7 +52,16 @@ public class UpdatedProductListener {
         log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}", partitionId, offset, groupId, receivedTimestamp, payload);
         try {
             List<DisplayProductRequest> productDTOs = productConverter.convertUpdatedProducts(payload);
+            if(CollectionUtils.isEmpty(productDTOs)) {
+                log.error("[EXCEPTION] product is null");
+                ack.acknowledge();
+                return;
+            }
             for (DisplayProductRequest product : productDTOs) {
+                if(product == null || !product.isValid()) {
+                    log.error("[EXCEPTION] product input is invalid");
+                    continue;
+                }
                 if(product.getMethodType() == MethodType.UPDATE) {
                     refreshProductService.updateProductInCache(product, product.getOldProduct());
                 } if(product.getMethodType() == MethodType.DELETE) {

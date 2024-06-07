@@ -16,3 +16,4 @@ spring:
         - store-local
         - db-local
         - redis-local
+    active: local
