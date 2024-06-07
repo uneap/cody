@@ -23,8 +23,17 @@
     - [x] 운영자가 아닌 유저가 새 브랜드를 등록하려하면, 등록할 수 없음
     - [x] full-cache-batch 모듈 구성하여 DB에 저장된 데이터를 redis로 전체 풀캐싱할 수 있음
     - [x] 운영자가 새로운 브랜드나 상품을 등록하거나 삭제, 변경하면, kafka를 통해 redis에 캐싱됨
+- [x] 테스트
     - [x] store모듈 unit test 추가
+        - [x] CATEGORY
+        - [x] BRAND
+        - [x] PRODUCT
+        - [x] USERS
+        - [x] ADMIN
     - [x] store-cache 모듈 unit test 추가
+        - [x] 1,2,3,4 별 기능 test 추가
+        - [x] 상품 삭제, 업데이트, 추가 시 redis에 잘 적재되는지 test
+        - [x] 브랜드 삭제 시 redis에 잘 적재되는지 test
     - [ ] display 애플리케이션 integration test 추가
     - [ ] stroage 애플리케이션 integration test 추가
     
