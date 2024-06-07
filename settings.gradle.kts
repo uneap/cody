@@ -15,7 +15,7 @@ module(name = ":common", "common")
 module(name = ":common:core", "common/core")
 
 module(name = ":backend", "backend")
-module(name = ":backend:bff", "backend/bff")
+module(name = ":backend:cache", "backend/cache")
 module(name = ":backend:display", "backend/display")
 module(name = ":backend:storage", "backend/storage")
 module(name = ":backend:full-cache-batch", "backend/full-cache-batch")

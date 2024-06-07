@@ -32,10 +32,8 @@ public class BrandStorageController {
         validRequestChecker.isNoneValid(request);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<BrandRequest> insertedBrands = brandStorageService.insertBrands(products);
-        List<DisplayProductRequest> insertedProducts = DisplayProductConverter.convertBrandToDisplayProduct(products, insertedBrands, MethodType.INSERT);
-        brandKafkaSender.sendBrands(insertedProducts);
 
-        return new BrandResponse(insertedProducts, products);
+        return new BrandResponse(insertedBrands, products);
     }
 
     @DeleteMapping(value = "/delete")
@@ -46,7 +44,7 @@ public class BrandStorageController {
         List<DisplayProductRequest> deletedProducts = DisplayProductConverter.convertBrandToDisplayProduct(products, deletedBrands, MethodType.DELETE);
         brandKafkaSender.sendBrands(deletedProducts);
 
-        return new BrandResponse(deletedProducts, products);
+        return new BrandResponse(deletedBrands, products);
 
     }
 
@@ -55,9 +53,7 @@ public class BrandStorageController {
         validRequestChecker.isNoneValid(request);
         List<DisplayProduct> products = request.getDisplayProducts();
         List<BrandRequest> updatedBrands = brandStorageService.updateBrands(products);
-        List<DisplayProductRequest> updatedProducts = DisplayProductConverter.convertBrandToDisplayProduct(products, updatedBrands, MethodType.UPDATE);
-        brandKafkaSender.sendBrands(updatedProducts);
 
-        return new BrandResponse(updatedProducts, products);
+        return new BrandResponse(updatedBrands, products);
     }
 }

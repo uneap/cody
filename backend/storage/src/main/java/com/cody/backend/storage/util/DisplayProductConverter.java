@@ -14,15 +14,14 @@ import org.springframework.util.CollectionUtils;
 
 public class DisplayProductConverter {
 
-    public static List<BrandRequest> convertToBrandRequestDTO(MethodType methodType,
-        List<DisplayProduct> displayProducts) {
+    public static List<BrandRequest> convertToBrandRequestDTO(MethodType methodType, List<DisplayProduct> displayProducts) {
         if (CollectionUtils.isEmpty(displayProducts)) {
             return new ArrayList<>();
         }
         return displayProducts.stream()
-                              .map(brand -> BrandRequest.builder()
-                                                        .id(brand.getBrandId())
-                                                        .name(brand.getBrandName())
+                              .map(product -> BrandRequest.builder()
+                                                        .id(product.getBrandId())
+                                                        .name(product.getBrandName())
                                                         .methodType(methodType)
                                                         .build())
                               .collect(Collectors.toList());
@@ -35,8 +34,7 @@ public class DisplayProductConverter {
         }
         return displayProducts.stream()
                               .map(displayProduct -> ProductRequestDTO.builder()
-                                                                      .brandId(
-                                                                          displayProduct.getBrandId())
+                                                                      .brandId(displayProduct.getBrandId())
                                                                       .categoryId(displayProduct.getCategoryId())
                                                                       .id(displayProduct.getProductId())
                                                                       .price(displayProduct.getProductPrice())
@@ -55,27 +53,22 @@ public class DisplayProductConverter {
                                           .collect(Collectors.toSet());
 
         return requests.stream()
-                       .filter(product -> brandIds.contains(product.getBrandId()))
-                       .map(displayProduct -> new DisplayProductRequest(methodType))
+                       .filter(product -> methodType == MethodType.INSERT || brandIds.contains(product.getBrandId()))
+                       .map(displayProduct -> DisplayProductRequest.builder()
+                                                                   .methodType(methodType)
+                                                                   .productName(displayProduct.getProductName())
+                                                                   .productPrice(displayProduct.getProductPrice())
+                                                                   .productId(displayProduct.getProductId())
+                                                                   .categoryName(displayProduct.getCategoryName())
+                                                                   .brandName(displayProduct.getBrandName())
+                                                                   .brandId(displayProduct.getBrandId())
+                                                                   .lastUpdatedDateTime(displayProduct.getLastUpdatedDateTime())
+                                                                   .categoryId(displayProduct.getCategoryId())
+                                                                   .build())
                        .collect(Collectors.toList());
     }
 
-    public static List<DisplayProductRequest> convertBrandToDisplayProductForUpdate(List<DisplayProduct> requests, List<BrandRequest> queriedBrands, MethodType methodType) {
-        if (CollectionUtils.isEmpty(requests) || CollectionUtils.isEmpty(queriedBrands)) {
-            return new ArrayList<>();
-        }
-        Set<Long> brandIds = queriedBrands.stream()
-                                          .map(BrandRequest::getId)
-                                          .collect(Collectors.toSet());
-
-        return requests.stream()
-                       .filter(product -> brandIds.contains(product.getBrandId()))
-                       .map(displayProduct -> new DisplayProductRequest(methodType))
-                       .collect(Collectors.toList());
-    }
-    public static List<DisplayProductRequest> convertProductToDisplayProduct(
-        List<DisplayProduct> requests, List<ProductRequestDTO> queriedProducts,
-        MethodType methodType) {
+    public static List<DisplayProductRequest> convertProductToDisplayProduct(List<DisplayProduct> requests, List<ProductRequestDTO> queriedProducts, MethodType methodType) {
         if (CollectionUtils.isEmpty(requests) || CollectionUtils.isEmpty(queriedProducts)) {
             return new ArrayList<>();
         }
@@ -83,8 +76,18 @@ public class DisplayProductConverter {
                                               .map(ProductDTO::getId)
                                               .collect(Collectors.toSet());
         return requests.stream()
-                       .filter(product -> productIds.contains(product.getProductId()))
-                       .map(displayProduct -> new DisplayProductRequest(methodType))
+                       .filter(product -> methodType == MethodType.INSERT || productIds.contains(product.getProductId()))
+                       .map(displayProduct -> DisplayProductRequest.builder()
+                                                                   .methodType(methodType)
+                                                                   .productName(displayProduct.getProductName())
+                                                                   .productPrice(displayProduct.getProductPrice())
+                                                                   .productId(displayProduct.getProductId())
+                                                                   .categoryName(displayProduct.getCategoryName())
+                                                                   .brandName(displayProduct.getBrandName())
+                                                                   .brandId(displayProduct.getBrandId())
+                                                                   .lastUpdatedDateTime(displayProduct.getLastUpdatedDateTime())
+                                                                   .categoryId(displayProduct.getCategoryId())
+                                                                   .build())
                        .collect(Collectors.toList());
     }
 }

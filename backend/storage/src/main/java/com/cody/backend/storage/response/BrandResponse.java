@@ -1,7 +1,7 @@
 package com.cody.backend.storage.response;
 
+import com.cody.domain.store.brand.dto.BrandRequest;
 import com.cody.domain.store.cache.dto.DisplayProduct;
-import com.cody.domain.store.cache.dto.DisplayProductRequest;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,9 +13,9 @@ import org.springframework.util.CollectionUtils;
 public class BrandResponse extends Response {
     private final List<String> failedBrandNames;
 
-    public BrandResponse(List<DisplayProductRequest> queriedProducts, List<DisplayProduct> request) {
+    public BrandResponse(List<BrandRequest> queriedProducts, List<DisplayProduct> request) {
         Set<String> brandNames = queriedProducts.stream()
-                                                .map(DisplayProductRequest::getBrandName)
+                                                .map(BrandRequest::getName)
                                                 .collect(Collectors.toSet());
         failedBrandNames = request.stream()
                                   .map(DisplayProduct::getBrandName)

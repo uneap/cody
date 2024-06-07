@@ -1,10 +1,13 @@
 package com.cody.backend.storage.service;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
 import com.cody.common.core.MethodType;
 import com.cody.domain.store.product.db.ProductService;
 import com.cody.domain.store.product.dto.ProductDTO;
 import com.cody.domain.store.product.dto.ProductRequestDTO;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,12 +33,11 @@ public class ProductStorageService {
     }
 
     public List<ProductRequestDTO> deleteProducts(List<ProductRequestDTO> productRequestDTOs) throws EmptyResultDataAccessException, EntityNotFoundException, IllegalStateException, IllegalArgumentException {
-        List<ProductDTO> products = new ArrayList<>();
         for (ProductRequestDTO productRequestDTO : productRequestDTOs){
-            products.add(productService.insert(productRequestDTO));
+            productService.deleteProduct(productRequestDTO);
         }
-        return products.stream()
-                       .map(product -> ProductRequestDTO.dtoBuilder(product, MethodType.INSERT))
+        return productRequestDTOs.stream()
+                       .peek(product -> product.setLastModifiedDate(LocalDateTime.parse(ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()))))
                        .collect(Collectors.toList());
     }
 

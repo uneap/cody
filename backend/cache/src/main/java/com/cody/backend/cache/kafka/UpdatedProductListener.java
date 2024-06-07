@@ -1,11 +1,11 @@
-package com.cody.domain.store.brand.kafka;
+package com.cody.backend.cache.kafka;
 
 import static org.springframework.kafka.retrytopic.TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE;
 
+import com.cody.domain.store.cache.service.RefreshProductService;
 import com.cody.common.core.MethodType;
-import com.cody.domain.store.brand.BrandConverter;
 import com.cody.domain.store.cache.dto.DisplayProductRequest;
-import com.cody.domain.store.cache.service.ProductStorageService;
+import com.cody.domain.store.product.ProductConverter;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +23,16 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UpdatedBrandListener {
-    @Value("${kafka.brand.retry.topic}")
+public class UpdatedProductListener {
+    @Value("${kafka.product.retry.topic}")
     private String retryTopic;
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final BrandConverter brandConverter;
-    private final ProductStorageService productStorageService;
+    private final ProductConverter productConverter;
+    private final RefreshProductService refreshProductService;
 
     @RetryableTopic(
         backoff = @Backoff(delay = 10 * 1000, multiplier = 3, maxDelay = 10 * 60 * 1000),
@@ -42,28 +41,23 @@ public class UpdatedBrandListener {
         dltStrategy = DltStrategy.ALWAYS_RETRY_ON_ERROR,
         listenerContainerFactory = "kafkaListenerContainerFactory"
     )
-    @KafkaListener(id = "updated-brand-stream", topics = {"${kafka.brand.topic}", "${kafka.brand.retry.topic}"})
+    @KafkaListener(id = "updated-product-stream", topics = {"${kafka.product.topic}", "${kafka.product.retry.topic}"})
     public void consume(@Payload String payload,
         @Header(KafkaHeaders.OFFSET) Long offset,
         @Header(KafkaHeaders.RECEIVED_PARTITION) int partitionId,
         @Header(KafkaHeaders.RECEIVED_TIMESTAMP) Long receivedTimestamp,
         @Header(KafkaHeaders.GROUP_ID) String groupId,
         Acknowledgment ack) {
-        log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}",
-            partitionId, offset, groupId, receivedTimestamp, payload);
+        log.info("[LISTEN] partitionId : {}, offset : {}, groupId : {}, receivedTimestamp : {}, payload : {}", partitionId, offset, groupId, receivedTimestamp, payload);
         try {
-            List<DisplayProductRequest> displayProducts = brandConverter.convertUpdatedBrands(payload);
-            if (CollectionUtils.isEmpty(displayProducts)) {
-                return;
-            }
-            MethodType type = displayProducts.get(0).getMethodType();
-            for (DisplayProductRequest displayProduct : displayProducts){
-                if(type == MethodType.UPDATE) {
-                    productStorageService.updateProductInCache(displayProduct);
-                }if(type == MethodType.DELETE) {
-                    productStorageService.deleteProductInCache(displayProduct);
-                }if(type == MethodType.INSERT) {
-                    productStorageService.addProductInCache(displayProduct);
+            List<DisplayProductRequest> productDTOs = productConverter.convertUpdatedProducts(payload);
+            for (DisplayProductRequest product : productDTOs) {
+                if(product.getMethodType() == MethodType.UPDATE) {
+                    refreshProductService.updateProductInCache(product, product.getOldProduct());
+                } if(product.getMethodType() == MethodType.DELETE) {
+                    refreshProductService.deleteProductInCache(product);
+                } if(product.getMethodType() == MethodType.INSERT) {
+                    refreshProductService.addProductInCache(product);
                 }
             }
             ack.acknowledge();

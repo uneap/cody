@@ -2,17 +2,19 @@ package com.cody.domain.store.cache.dto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
+@NoArgsConstructor
 public class AllUser {
-    private final long userId;
-    private final Long adminId;
-    private final String adminName;
-    private final String userName;
-    private final LocalDateTime lastUpdatedDateTime;
+    private long userId;
+    private Long adminId;
+    private String adminName;
+    private String userName;
+    private LocalDateTime lastUpdatedDateTime;
 
     @Override
     public boolean equals(Object obj) {
