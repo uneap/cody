@@ -1,7 +1,6 @@
-package com.cody.domain.store.seller.db;
+package com.cody.domain.store.admin.db;
 
 import com.cody.domain.store.TestConfiguration;
-import com.cody.domain.store.admin.db.AdminService;
 import com.cody.domain.store.admin.dto.AdminDTO;
 import java.util.Arrays;
 import java.util.List;
