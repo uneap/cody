@@ -19,7 +19,13 @@ public class DisplayProductRequest extends DisplayProduct {
     }
     @Override
     public boolean isValid() {
-        return super.isValid() && oldProduct != null && oldProduct.isValid() && methodType != null;
+        if(methodType == null) {
+            return false;
+        }
+        if(methodType == MethodType.INSERT) {
+            return super.isValid();
+        }
+        return super.isValid() && oldProduct != null && oldProduct.isValid();
     }
     public DisplayProductRequest(MethodType methodType, DisplayProduct oldProduct) {
         super();

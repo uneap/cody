@@ -27,4 +27,9 @@ public class BrandRequest extends BrandDTO implements Comparable<BrandRequest> {
             .methodType(type)
             .version(brandDAO.getVersion()).build();
     }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() &&  methodType != null;
+    }
 }

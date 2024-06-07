@@ -18,17 +18,17 @@ public class ProductResponse extends Response {
 
     public ProductResponse(List<DisplayProductRequest> queriedProducts, List<DisplayProduct> request) {
         Set<UniqueProduct> queriedUniqueProducts = queriedProducts.stream()
-                                                                  .map(product -> UniqueProduct
-                                                                      .builder()
-                                                                      .brandId(product.getProductId())
+                                                                  .map(product -> UniqueProduct.builder()
+                                                                      .brandId(product.getBrandId())
+                                                                      .categoryId(product.getCategoryId())
                                                                       .name(product.getProductName())
                                                                       .build())
                                                                   .collect(Collectors.toSet());
         failedProducts = request.stream()
-                                .map(product -> UniqueProduct
-                                    .builder()
-                                    .brandId(product.getProductId())
-                                    .name(product.getProductName())
+                                .map(product -> UniqueProduct.builder()
+                                                             .brandId(product.getBrandId())
+                                                             .categoryId(product.getCategoryId())
+                                                             .name(product.getProductName())
                                     .build())
                                 .filter(product -> !queriedUniqueProducts.contains(product))
                                 .collect(Collectors.toSet());

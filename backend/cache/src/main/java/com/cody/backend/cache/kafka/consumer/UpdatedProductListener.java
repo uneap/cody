@@ -58,16 +58,18 @@ public class UpdatedProductListener {
                 return;
             }
             for (DisplayProductRequest product : productDTOs) {
-                if(product == null || !product.isValid()) {
+                if(product == null || !product.isConsumeValid()) {
                     log.error("[EXCEPTION] product input is invalid");
                     continue;
                 }
-                if(product.getMethodType() == MethodType.UPDATE) {
+                if(product.getMethodType() == MethodType.UPDATE && product.getOldProduct().isConsumeValid()) {
                     refreshProductService.updateProductInCache(product, product.getOldProduct());
-                } if(product.getMethodType() == MethodType.DELETE) {
+                }else if(product.getMethodType() == MethodType.DELETE && product.getOldProduct().isConsumeValid()) {
                     refreshProductService.deleteProductInCache(product);
-                } if(product.getMethodType() == MethodType.INSERT) {
+                }else if(product.getMethodType() == MethodType.INSERT) {
                     refreshProductService.addProductInCache(product);
+                } else {
+                    log.error("[EXCEPTION] product input is invalid");
                 }
             }
             ack.acknowledge();

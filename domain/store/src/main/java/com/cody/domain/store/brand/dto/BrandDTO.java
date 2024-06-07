@@ -1,6 +1,7 @@
 package com.cody.domain.store.brand.dto;
 
 import com.cody.domain.store.brand.db.BrandDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,21 @@ public class BrandDTO {
             .createdDate(brandDAO.getCreatedDate())
             .lastModifiedDate(brandDAO.getLastModifiedDate())
             .version(brandDAO.getVersion()).build();
+    }
+    @JsonIgnore
+    public boolean isConsumeValid() {
+        return id != null
+            && name != null
+            && version != null
+            && lastModifiedDate != null;
+    }
+    @JsonIgnore
+    public boolean isValid() {
+        return id != null
+            && name != null;
+    }
+    @JsonIgnore
+    public boolean isInsertValid() {
+        return name != null;
     }
 }
