@@ -8,4 +8,6 @@ dependencies {
     implementation(libs.lombok)
     annotationProcessor(libs.lombok)
     testAnnotationProcessor(libs.lombok)
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.jpa)
 }

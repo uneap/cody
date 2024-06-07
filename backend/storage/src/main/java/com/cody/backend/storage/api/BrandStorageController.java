@@ -1,13 +1,17 @@
 package com.cody.backend.storage.api;
 
-import com.cody.backend.storage.request.BrandRequest;
+import com.cody.backend.storage.request.StorageRequest;
 import com.cody.backend.storage.response.BrandResponse;
+import com.cody.backend.storage.producer.BrandKafkaSender;
 import com.cody.backend.storage.service.BrandStorageService;
+import com.cody.backend.storage.util.DisplayProductConverter;
+import com.cody.backend.storage.util.ValidRequestChecker;
 import com.cody.common.core.MethodType;
-import com.cody.domain.store.brand.dto.BrandRequestDTO;
+import com.cody.domain.store.brand.dto.BrandRequest;
+import com.cody.domain.store.cache.dto.DisplayProduct;
+import com.cody.domain.store.cache.dto.DisplayProductRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,35 +23,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cody/v1/brand/storage")
 @RequiredArgsConstructor
 public class BrandStorageController {
-
     private final BrandStorageService brandStorageService;
+    private final BrandKafkaSender brandKafkaSender;
+    private final ValidRequestChecker validRequestChecker;
 
     @PostMapping(value = "/insert")
-    public BrandResponse insertBrands(@RequestBody BrandRequest brandRequest) {
-        List<BrandRequestDTO> brands = brandRequest.convertToKafkaVersion(MethodType.INSERT);
-        brandStorageService.insertBrands(brands);
-        return BrandResponse.builder()
-                            .statusCode(200)
-                            .reason(HttpStatus.OK.getReasonPhrase())
-                            .build();
+    public BrandResponse insertBrands(@RequestBody StorageRequest request) {
+        validRequestChecker.isNoneValid(request);
+        List<DisplayProduct> products = request.getDisplayProducts();
+        List<BrandRequest> insertedBrands = brandStorageService.insertBrands(products);
+
+        return new BrandResponse(insertedBrands, products);
     }
 
     @DeleteMapping(value = "/delete")
-    public BrandResponse deleteBrands(@RequestBody BrandRequest brandRequest) {
-        List<BrandRequestDTO> brands = brandRequest.convertToKafkaVersion(MethodType.DELETE);
-        brandStorageService.deleteBrands(brands);
-        return BrandResponse.builder()
-                            .statusCode(200)
-                            .reason(HttpStatus.OK.getReasonPhrase())
-                            .build();
+    public BrandResponse deleteBrands(@RequestBody StorageRequest request) {
+        validRequestChecker.isNoneValid(request);
+        List<DisplayProduct> products = request.getDisplayProducts();
+        List<BrandRequest> deletedBrands = brandStorageService.deleteBrands(products);
+        List<DisplayProductRequest> deletedProducts = DisplayProductConverter.convertBrandToDisplayProduct(products, deletedBrands, MethodType.DELETE);
+        brandKafkaSender.sendBrands(deletedProducts);
+
+        return new BrandResponse(deletedBrands, products);
+
     }
+
     @PutMapping(value = "/update")
-    public BrandResponse updateBrands(@RequestBody BrandRequest brandRequest) {
-        List<BrandRequestDTO> brands = brandRequest.convertToKafkaVersion(MethodType.UPDATE);
-        brandStorageService.updateBrands(brands);
-        return BrandResponse.builder()
-                            .statusCode(200)
-                            .reason(HttpStatus.OK.getReasonPhrase())
-                            .build();
+    public BrandResponse updateBrands(@RequestBody StorageRequest request) {
+        validRequestChecker.isNoneValid(request);
+        List<DisplayProduct> products = request.getDisplayProducts();
+        List<BrandRequest> updatedBrands = brandStorageService.updateBrands(products);
+
+        return new BrandResponse(updatedBrands, products);
     }
 }

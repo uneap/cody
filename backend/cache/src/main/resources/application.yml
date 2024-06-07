@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    group:
+      local:
+        - local
+        - kafka-local
+        - store-local
+        - db-local
+        - redis-local
+    active: local

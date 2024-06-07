@@ -1,0 +1,19 @@
+spring:
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      name: ${job.name:NONE}
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  profiles:
+    group:
+      local:
+        - local
+        - store-local
+        - db-local
+        - redis-local
+    active: local

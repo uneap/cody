@@ -1,23 +1,32 @@
 package com.cody.domain.store.cache.dto;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@Setter
+@SuperBuilder
+@NoArgsConstructor
 public class DisplayProduct {
-    private final long brandId;
-    private final String brandName;
-    private final long categoryId;
-    private final String categoryName;
-    private final String productName;
-    private final long productPrice;
+    private long brandId;
+    private long categoryId;
+    @JsonInclude(Include.NON_NULL)
+    private String brandName;
+    private String categoryName;
+    private String productName;
+    private long productPrice;
     @Setter
+    @JsonInclude(Include.NON_NULL)
     private LocalDateTime lastUpdatedDateTime;
-    private final long productId;
+    private long productId;
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof DisplayProduct product) {
@@ -29,5 +38,27 @@ public class DisplayProduct {
     @Override
     public int hashCode() {
         return Objects.hash(productId);
+    }
+
+    public boolean isValid() {
+        return brandId != 0L
+            && categoryName != null
+            && categoryId != 0L
+            && brandName != null
+            && productName != null
+            && productPrice != 0L
+            && productId != 0L
+            && lastUpdatedDateTime != null;
+    }
+
+    public DisplayProduct(ZSetProduct zSetProduct, String brandName, long productPrice, String time) {
+        this.productId = zSetProduct.getProductId();
+        this.brandId = zSetProduct.getBrandId();
+        this.categoryId = zSetProduct.getCategoryId();
+        this.categoryName = zSetProduct.getCategoryName();
+        this.productName = zSetProduct.getProductName();
+        this.productPrice = productPrice;
+        this.brandName = brandName;
+        this.lastUpdatedDateTime = LocalDateTime.parse(time, ISO_LOCAL_DATE_TIME);
     }
 }

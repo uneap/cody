@@ -1,7 +1,7 @@
 package com.cody.domain.store.category.db;
 
 
-import static com.cody.common.core.Constants.formatter;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -21,6 +23,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @Getter
 @Entity(name = "CATEGORY")
+@Table(name = "CATEGORY", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "name"),
+    @UniqueConstraint(columnNames = "id")
+})
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryDAO {
@@ -44,8 +50,8 @@ public class CategoryDAO {
 
     @PrePersist
     public void onPrePersist() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, ISO_LOCAL_DATE_TIME);
         this.createdDate = parsedCreateDate;
         if(version == null) {
             this.version = 0L;
@@ -55,7 +61,7 @@ public class CategoryDAO {
 
     @PreUpdate
     public void onPreUpdate() {
-        String customLocalDateTimeFormat = LocalDateTime.now().format(formatter);
-        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, formatter);
+        String customLocalDateTimeFormat = LocalDateTime.now().format(ISO_LOCAL_DATE_TIME);
+        this.lastModifiedDate = LocalDateTime.parse(customLocalDateTimeFormat, ISO_LOCAL_DATE_TIME);
     }
 }

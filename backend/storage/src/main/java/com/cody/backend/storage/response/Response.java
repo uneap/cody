@@ -1,10 +1,15 @@
 package com.cody.backend.storage.response;
 
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
+import lombok.NoArgsConstructor;
+
 @Getter
-@SuperBuilder
+@NoArgsConstructor
 public class Response {
-    private int statusCode;
-    private String reason;
+    protected int statusCode;
+    protected String reason;
+    public Response(int statusCode, String reason) {
+        this.statusCode = statusCode;
+        this.reason = reason;
+    }
 }

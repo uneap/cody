@@ -1,7 +1,9 @@
 package com.cody.domain.store.cache.config;
 
 import com.cody.domain.store.cache.dto.AllUser;
+import com.cody.domain.store.cache.dto.FullBrand;
 import com.cody.domain.store.cache.dto.DisplayProduct;
+import com.cody.domain.store.cache.dto.ZSetProduct;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -41,9 +43,9 @@ public class StorageRedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, DisplayProduct> redisDisplayProductTemplate() {
-        Jackson2JsonRedisSerializer<DisplayProduct> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, DisplayProduct.class);
-        RedisTemplate<String, DisplayProduct> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, ZSetProduct> redisDisplayProductTemplate() {
+        Jackson2JsonRedisSerializer<ZSetProduct> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, ZSetProduct.class);
+        RedisTemplate<String, ZSetProduct> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -54,6 +56,16 @@ public class StorageRedisConfig {
     public RedisTemplate<String, AllUser> redisAllUserTemplate() {
         Jackson2JsonRedisSerializer<AllUser> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, AllUser.class);
         RedisTemplate<String, AllUser> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, FullBrand> redisBrandTemplate() {
+        Jackson2JsonRedisSerializer<FullBrand> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, FullBrand.class);
+        RedisTemplate<String, FullBrand> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setConnectionFactory(redisConnectionFactory);
