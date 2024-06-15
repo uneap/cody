@@ -1,6 +1,7 @@
 # cody architecture
 
-![아키텍처](https://github.com/uneap/cody/assets/25525648/5670b4ba-6dea-46e4-b371-e0a59bc77a6c)
+![아키텍처](https://github.com/uneap/cody/assets/25525648/c911458d-6726-4101-844d-c31bad70ab07)
+
 
 # 요구사항
 - [x] 아키텍처 구성
